@@ -1,0 +1,11 @@
+{
+  "name": "CoffeeMeet",
+  "displayName": "CoffeeMeet",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "ced24739-64fe-42f7-b119-c4abaab05ba6"
+      }
+    }
+  }
+}
