@@ -3,15 +3,22 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, Button, ScrollV
 import { supabase } from '../supabase';
 import UserContext from '../context/UserContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { sendPushNotification } from '../expoApi';
+import navigateToScreen from '../PushNotification';
 
-const Requests = () => {
+const Requests = ({navigation}) => {
     const [requests, setRequests] = useState(null);
-    const { user, currPlaceId, pushNotificationToken } = useContext(UserContext);
+    const { user, currPlaceId } = useContext(UserContext);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
+        console.log(user);
+        navigateToScreen().then(screenName => {
+            if (screenName) {
+                navigation.navigate(screenName);
+            }
+        });
+
         const getRequestsAndPosts = async () => {
             try {
               const { data: requestData, error: requestError } = await supabase
@@ -60,7 +67,6 @@ const Requests = () => {
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'requests' },
                 (payload) => {
-                    handleSendNotification();
                     getRequestsAndPosts();
                 })
                 .subscribe();
@@ -69,14 +75,6 @@ const Requests = () => {
             requestsSubscription.unsubscribe();
           };
     }, []);
-
-    const handleSendNotification = () => {
-        const expoPushToken = pushNotificationToken; // Replace with the recipient's Expo push token
-        const notificationTitle = 'Chize';
-        const notificationMessage = 'You have a match!';
-
-        sendPushNotification(expoPushToken, notificationTitle, notificationMessage);
-    };
 
     const handleAccept = async () => {
         if (selectedRequest && user) {
@@ -89,6 +87,8 @@ const Requests = () => {
                             user1_id: user_id,
                             user2_id: selectedRequest.profiles.user_id,
                             place_id: currPlaceId,
+                            user1_deviceToken: user.deviceToken,
+                            user2_deviceToken: selectedRequest.profiles.deviceToken,
                         },
                     ]);
 
@@ -137,7 +137,6 @@ const Requests = () => {
                         onPress={() => {
                             setSelectedRequest(request);
                             setModalVisible(true);
-                            console.log(selectedRequest);
                         }}
                         style={styles.postContainer}
                         >
@@ -197,7 +196,7 @@ const styles = StyleSheet.create({
     },
     postImage: {
         width: '100%',
-        height: 400,
+        height: 500,
     },
     interestsContainer: {
         flexDirection: 'row',
@@ -231,7 +230,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: 'white',
         alignItems: 'center',
-        paddingVertical: 20,
+        paddingTop: 20,
     },
     postDetails: {
         borderRadius: 10,

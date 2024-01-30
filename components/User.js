@@ -9,6 +9,8 @@ import React, {useEffect} from 'react';
 import SignUpSlider from '../components/SignUpSlider';
 import UserStack from '../components/UserStack';
 import { createStackNavigator } from '@react-navigation/stack';
+import { supabase } from '../supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 

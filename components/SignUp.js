@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { supabase } from '../supabase';
+import Toast from 'react-native-toast-message';
 
 const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -47,12 +48,12 @@ const SignUp = ({ navigation }) => {
       }
 
       if (data) {
-        console.log(data);
-        await supabase.from('profiles').insert([
-          {
-            user_id: data.session.user.id,
-          },
-        ]);
+        navigation.navigate('SignIn', {verEmail: email, verPassword: password});
+        Toast.show({
+          type: 'success',
+          text1: 'Email Verification!',
+          text2: 'Email was sent to your email!',
+        });
       }
 
       if (error) {
@@ -133,16 +134,17 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 25,
     marginVertical: 20,
+    fontWeight: 400,
   },
   submitButton: {
     backgroundColor: '#FF5A5F',
     borderRadius: 8,
-    paddingVertical: 10,
+    paddingVertical: 15,
     marginTop: 10,
     paddingHorizontal: 20,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   submitButtonText: {
     color: 'white',
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 40,
+    height: 45,
     borderColor: '#CCCCCC',
     borderWidth: 1,
     borderRadius: 5,

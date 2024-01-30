@@ -7,15 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* CoffeeMeetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CoffeeMeetTests.m */; };
+		00E356F31AD99517003FC87E /* ChizeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ChizeTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2A8E9315CBDC6E13D1200411 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1115E697086EAC1DCA07DD /* ExpoModulesProvider.swift */; };
-		548F2A851342201C1F8EE66C /* libPods-CoffeeMeet-CoffeeMeetTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 796D63CCA4925F4A976F2C8E /* libPods-CoffeeMeet-CoffeeMeetTests.a */; };
+		4A4B074FF5D59F3DE46379A1 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778E219C3933ABB58ACF502B /* ExpoModulesProvider.swift */; };
+		7987AF20E5C381CE09E3FE51 /* libPods-Chize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB341B1F35C9E5E76D2E3484 /* libPods-Chize.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		9C418FA279281B9659920F13 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA14EDC4040FFF84F9122BC7 /* ExpoModulesProvider.swift */; };
-		D84B83B3C55A14F4CD607D61 /* libPods-CoffeeMeet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 999651AA095CC0D4B1EEEAC9 /* libPods-CoffeeMeet.a */; };
+		9D3F1D52F7F49D845CE70F04 /* libPods-Chize-ChizeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B0BE8014256381B98239F60C /* libPods-Chize-ChizeTests.a */; };
+		E512C2742ABB65A600CC24F1 /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = E512C2732ABB65A600CC24F1 /* Configuration.storekit */; };
+		E512C2762ABB663800CC24F1 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = E512C2752ABB663800CC24F1 /* StoreKitTestCertificate.cer */; };
 		E592A1222A64EEEF0020F4F7 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E592A1122A64EEEE0020F4F7 /* SimpleLineIcons.ttf */; };
 		E592A1232A64EEEF0020F4F7 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E592A1132A64EEEF0020F4F7 /* Ionicons.ttf */; };
 		E592A1242A64EEEF0020F4F7 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E592A1142A64EEEF0020F4F7 /* Zocial.ttf */; };
@@ -33,6 +34,8 @@
 		E592A1302A64EEEF0020F4F7 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E592A1202A64EEEF0020F4F7 /* EvilIcons.ttf */; };
 		E592A1312A64EEEF0020F4F7 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E592A1212A64EEEF0020F4F7 /* MaterialIcons.ttf */; };
 		E5AB7C0F2A8973E70002D7B2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5AB7C0E2A8973E70002D7B2 /* StoreKit.framework */; };
+		E5F7117E2AC5007D006439F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5F7117D2AC5007D006439F9 /* Assets.xcassets */; };
+		FABD547DEC8B64C386887DE1 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19918248CE67E4519FECF1EE /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +44,7 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = CoffeeMeet;
+			remoteInfo = Chize;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -59,25 +62,31 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* CoffeeMeetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoffeeMeetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* ChizeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChizeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* CoffeeMeetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoffeeMeetTests.m; sourceTree = "<group>"; };
-		0E1115E697086EAC1DCA07DD /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* CoffeeMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = CoffeeMeet/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = CoffeeMeet/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CoffeeMeet/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CoffeeMeet/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CoffeeMeet/main.m; sourceTree = "<group>"; };
-		4A5F81F080ACDA6F42E324FC /* Pods-CoffeeMeet-CoffeeMeetTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoffeeMeet-CoffeeMeetTests.debug.xcconfig"; path = "Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5D2A7B2BF747F715C0D1BD98 /* Pods-CoffeeMeet-CoffeeMeetTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoffeeMeet-CoffeeMeetTests.release.xcconfig"; path = "Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests.release.xcconfig"; sourceTree = "<group>"; };
-		796D63CCA4925F4A976F2C8E /* libPods-CoffeeMeet-CoffeeMeetTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoffeeMeet-CoffeeMeetTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CoffeeMeet/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		999651AA095CC0D4B1EEEAC9 /* libPods-CoffeeMeet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoffeeMeet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA14EDC4040FFF84F9122BC7 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-CoffeeMeet/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		CE8A01008434BE56C9B164A4 /* Pods-CoffeeMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoffeeMeet.release.xcconfig"; path = "Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet.release.xcconfig"; sourceTree = "<group>"; };
-		D4E6CF3D05F6DC5D4C6DD490 /* Pods-CoffeeMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoffeeMeet.debug.xcconfig"; path = "Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet.debug.xcconfig"; sourceTree = "<group>"; };
-		E5827D542A6D031900D1A7B6 /* CoffeeMeet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CoffeeMeet.entitlements; path = CoffeeMeet/CoffeeMeet.entitlements; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* ChizeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChizeTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Chize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chize.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Chize/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Chize/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Chize/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Chize/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Chize/main.m; sourceTree = "<group>"; };
+		13F134A1229592CC4CBE5E62 /* Pods-Chize.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize.debug.xcconfig"; path = "Target Support Files/Pods-Chize/Pods-Chize.debug.xcconfig"; sourceTree = "<group>"; };
+		19918248CE67E4519FECF1EE /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Chize/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		492CCA307A2F82CC9B91589F /* Pods-Chize.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize.release.xcconfig"; path = "Target Support Files/Pods-Chize/Pods-Chize.release.xcconfig"; sourceTree = "<group>"; };
+		4A5F81F080ACDA6F42E324FC /* Pods-Chize-ChizeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize-ChizeTests.debug.xcconfig"; path = "Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5D2A7B2BF747F715C0D1BD98 /* Pods-Chize-ChizeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize-ChizeTests.release.xcconfig"; path = "Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests.release.xcconfig"; sourceTree = "<group>"; };
+		778E219C3933ABB58ACF502B /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Chize-ChizeTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Chize/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A3E5F11330E3089F63B8CA05 /* Pods-Chize-ChizeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize-ChizeTests.debug.xcconfig"; path = "Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B0BE8014256381B98239F60C /* libPods-Chize-ChizeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Chize-ChizeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB341B1F35C9E5E76D2E3484 /* libPods-Chize.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Chize.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9AAB9FE2EF06BAAB82A526D /* Pods-Chize-ChizeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize-ChizeTests.release.xcconfig"; path = "Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests.release.xcconfig"; sourceTree = "<group>"; };
+		CE8A01008434BE56C9B164A4 /* Pods-Chize.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize.release.xcconfig"; path = "Target Support Files/Pods-Chize/Pods-Chize.release.xcconfig"; sourceTree = "<group>"; };
+		D4E6CF3D05F6DC5D4C6DD490 /* Pods-Chize.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chize.debug.xcconfig"; path = "Target Support Files/Pods-Chize/Pods-Chize.debug.xcconfig"; sourceTree = "<group>"; };
+		E512C2732ABB65A600CC24F1 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		E512C2752ABB663800CC24F1 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = StoreKitTestCertificate.cer; path = ../../StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		E5827D542A6D031900D1A7B6 /* Chize.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Chize.entitlements; path = Chize/Chize.entitlements; sourceTree = "<group>"; };
 		E592A1122A64EEEE0020F4F7 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		E592A1132A64EEEF0020F4F7 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		E592A1142A64EEEF0020F4F7 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
@@ -96,6 +105,7 @@
 		E592A1212A64EEEF0020F4F7 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		E5AB7C0E2A8973E70002D7B2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		E5D2FCFF2AA1C845008D050F /* libReact-hermes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libReact-hermes.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5F7117D2AC5007D006439F9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -104,7 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				548F2A851342201C1F8EE66C /* libPods-CoffeeMeet-CoffeeMeetTests.a in Frameworks */,
+				9D3F1D52F7F49D845CE70F04 /* libPods-Chize-ChizeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,20 +123,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5AB7C0F2A8973E70002D7B2 /* StoreKit.framework in Frameworks */,
-				D84B83B3C55A14F4CD607D61 /* libPods-CoffeeMeet.a in Frameworks */,
+				7987AF20E5C381CE09E3FE51 /* libPods-Chize.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* CoffeeMeetTests */ = {
+		00E356EF1AD99517003FC87E /* ChizeTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* CoffeeMeetTests.m */,
+				00E356F21AD99517003FC87E /* ChizeTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = CoffeeMeetTests;
+			path = ChizeTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -137,18 +147,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* CoffeeMeet */ = {
+		13B07FAE1A68108700A75B9A /* Chize */ = {
 			isa = PBXGroup;
 			children = (
-				E5827D542A6D031900D1A7B6 /* CoffeeMeet.entitlements */,
+				E5827D542A6D031900D1A7B6 /* Chize.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				E5F7117D2AC5007D006439F9 /* Assets.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = CoffeeMeet;
+			name = Chize;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -157,18 +168,18 @@
 				E5D2FCFF2AA1C845008D050F /* libReact-hermes.a */,
 				E5AB7C0E2A8973E70002D7B2 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				999651AA095CC0D4B1EEEAC9 /* libPods-CoffeeMeet.a */,
-				796D63CCA4925F4A976F2C8E /* libPods-CoffeeMeet-CoffeeMeetTests.a */,
+				BB341B1F35C9E5E76D2E3484 /* libPods-Chize.a */,
+				B0BE8014256381B98239F60C /* libPods-Chize-ChizeTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		782D8312C98CA07485FB5750 /* CoffeeMeet */ = {
+		7D55899B04F05E4627169AFE /* ChizeTests */ = {
 			isa = PBXGroup;
 			children = (
-				BA14EDC4040FFF84F9122BC7 /* ExpoModulesProvider.swift */,
+				778E219C3933ABB58ACF502B /* ExpoModulesProvider.swift */,
 			);
-			name = CoffeeMeet;
+			name = ChizeTests;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -178,13 +189,23 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		83330069937E844DCA9C16F9 /* Chize */ = {
+			isa = PBXGroup;
+			children = (
+				19918248CE67E4519FECF1EE /* ExpoModulesProvider.swift */,
+			);
+			name = Chize;
+			sourceTree = "<group>";
+		};
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				E512C2732ABB65A600CC24F1 /* Configuration.storekit */,
+				E512C2752ABB663800CC24F1 /* StoreKitTestCertificate.cer */,
 				E592A1112A64EEA50020F4F7 /* Fonts */,
-				13B07FAE1A68108700A75B9A /* CoffeeMeet */,
+				13B07FAE1A68108700A75B9A /* Chize */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* CoffeeMeetTests */,
+				00E356EF1AD99517003FC87E /* ChizeTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -198,8 +219,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* CoffeeMeet.app */,
-				00E356EE1AD99517003FC87E /* CoffeeMeetTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Chize.app */,
+				00E356EE1AD99517003FC87E /* ChizeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -207,8 +228,8 @@
 		B59956B74A7ED97840085096 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				782D8312C98CA07485FB5750 /* CoffeeMeet */,
-				D2A27D301D32CF03C298BE1F /* CoffeeMeetTests */,
+				83330069937E844DCA9C16F9 /* Chize */,
+				7D55899B04F05E4627169AFE /* ChizeTests */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -216,20 +237,16 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D4E6CF3D05F6DC5D4C6DD490 /* Pods-CoffeeMeet.debug.xcconfig */,
-				CE8A01008434BE56C9B164A4 /* Pods-CoffeeMeet.release.xcconfig */,
-				4A5F81F080ACDA6F42E324FC /* Pods-CoffeeMeet-CoffeeMeetTests.debug.xcconfig */,
-				5D2A7B2BF747F715C0D1BD98 /* Pods-CoffeeMeet-CoffeeMeetTests.release.xcconfig */,
+				D4E6CF3D05F6DC5D4C6DD490 /* Pods-Chize.debug.xcconfig */,
+				CE8A01008434BE56C9B164A4 /* Pods-Chize.release.xcconfig */,
+				4A5F81F080ACDA6F42E324FC /* Pods-Chize-ChizeTests.debug.xcconfig */,
+				5D2A7B2BF747F715C0D1BD98 /* Pods-Chize-ChizeTests.release.xcconfig */,
+				13F134A1229592CC4CBE5E62 /* Pods-Chize.debug.xcconfig */,
+				492CCA307A2F82CC9B91589F /* Pods-Chize.release.xcconfig */,
+				A3E5F11330E3089F63B8CA05 /* Pods-Chize-ChizeTests.debug.xcconfig */,
+				C9AAB9FE2EF06BAAB82A526D /* Pods-Chize-ChizeTests.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		D2A27D301D32CF03C298BE1F /* CoffeeMeetTests */ = {
-			isa = PBXGroup;
-			children = (
-				0E1115E697086EAC1DCA07DD /* ExpoModulesProvider.swift */,
-			);
-			name = CoffeeMeetTests;
 			sourceTree = "<group>";
 		};
 		E592A1112A64EEA50020F4F7 /* Fonts */ = {
@@ -258,9 +275,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* CoffeeMeetTests */ = {
+		00E356ED1AD99517003FC87E /* ChizeTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "CoffeeMeetTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ChizeTests" */;
 			buildPhases = (
 				53BA4C3349A1CEF4ECBC3232 /* [CP] Check Pods Manifest.lock */,
 				CA5D943D5C4E2762F4F4174B /* [Expo] Configure project */,
@@ -275,14 +292,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = CoffeeMeetTests;
-			productName = CoffeeMeetTests;
-			productReference = 00E356EE1AD99517003FC87E /* CoffeeMeetTests.xctest */;
+			name = ChizeTests;
+			productName = ChizeTests;
+			productReference = 00E356EE1AD99517003FC87E /* ChizeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* CoffeeMeet */ = {
+		13B07F861A680F5B00A75B9A /* Chize */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CoffeeMeet" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Chize" */;
 			buildPhases = (
 				EE1C3DFB6A5DC1E760760A9D /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -299,9 +316,9 @@
 			);
 			dependencies = (
 			);
-			name = CoffeeMeet;
-			productName = CoffeeMeet;
-			productReference = 13B07F961A680F5B00A75B9A /* CoffeeMeet.app */;
+			name = Chize;
+			productName = Chize;
+			productReference = 13B07F961A680F5B00A75B9A /* Chize.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -323,7 +340,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CoffeeMeet" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Chize" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -336,8 +353,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* CoffeeMeet */,
-				00E356ED1AD99517003FC87E /* CoffeeMeetTests */,
+				13B07F861A680F5B00A75B9A /* Chize */,
+				00E356ED1AD99517003FC87E /* ChizeTests */,
 			);
 		};
 /* End PBXProject section */
@@ -357,6 +374,8 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				E592A12D2A64EEEF0020F4F7 /* FontAwesome.ttf in Resources */,
 				E592A1262A64EEEF0020F4F7 /* MaterialCommunityIcons.ttf in Resources */,
+				E512C2742ABB65A600CC24F1 /* Configuration.storekit in Resources */,
+				E5F7117E2AC5007D006439F9 /* Assets.xcassets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E592A12C2A64EEEF0020F4F7 /* FontAwesome5_Solid.ttf in Resources */,
 				E592A12A2A64EEEF0020F4F7 /* FontAwesome5_Regular.ttf in Resources */,
@@ -368,6 +387,7 @@
 				E592A1302A64EEEF0020F4F7 /* EvilIcons.ttf in Resources */,
 				E592A1232A64EEEF0020F4F7 /* Ionicons.ttf in Resources */,
 				E592A1222A64EEEF0020F4F7 /* SimpleLineIcons.ttf in Resources */,
+				E512C2762ABB663800CC24F1 /* StoreKitTestCertificate.cer in Resources */,
 				E592A1312A64EEEF0020F4F7 /* MaterialIcons.ttf in Resources */,
 				E592A1282A64EEEF0020F4F7 /* Feather.ttf in Resources */,
 				E592A12F2A64EEEF0020F4F7 /* Fontisto.ttf in Resources */,
@@ -411,7 +431,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-CoffeeMeet/expo-configure-project.sh\"\n";
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Chize/expo-configure-project.sh\"\n";
 		};
 		496E6E8D0A59D75C2B60FEC4 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -419,15 +439,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		53BA4C3349A1CEF4ECBC3232 /* [CP] Check Pods Manifest.lock */ = {
@@ -445,7 +465,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CoffeeMeet-CoffeeMeetTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Chize-ChizeTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -458,15 +478,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize/Pods-Chize-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize/Pods-Chize-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chize/Pods-Chize-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CA5D943D5C4E2762F4F4174B /* [Expo] Configure project */ = {
@@ -486,7 +506,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-CoffeeMeet-CoffeeMeetTests/expo-configure-project.sh\"\n";
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-Chize-ChizeTests/expo-configure-project.sh\"\n";
 		};
 		DE574326908F66091E1BE1CD /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -494,15 +514,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize/Pods-Chize-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize/Pods-Chize-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet/Pods-CoffeeMeet-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chize/Pods-Chize-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EE1C3DFB6A5DC1E760760A9D /* [CP] Check Pods Manifest.lock */ = {
@@ -520,7 +540,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CoffeeMeet-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Chize-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -533,15 +553,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CoffeeMeet-CoffeeMeetTests/Pods-CoffeeMeet-CoffeeMeetTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Chize-ChizeTests/Pods-Chize-ChizeTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -570,8 +590,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* CoffeeMeetTests.m in Sources */,
-				2A8E9315CBDC6E13D1200411 /* ExpoModulesProvider.swift in Sources */,
+				00E356F31AD99517003FC87E /* ChizeTests.m in Sources */,
+				4A4B074FF5D59F3DE46379A1 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,7 +601,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				9C418FA279281B9659920F13 /* ExpoModulesProvider.swift in Sources */,
+				FABD547DEC8B64C386887DE1 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,7 +610,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* CoffeeMeet */;
+			target = 13B07F861A680F5B00A75B9A /* Chize */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -598,7 +618,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4A5F81F080ACDA6F42E324FC /* Pods-CoffeeMeet-CoffeeMeetTests.debug.xcconfig */;
+			baseConfigurationReference = A3E5F11330E3089F63B8CA05 /* Pods-Chize-ChizeTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = 98WJP6S25J;
@@ -606,7 +626,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = CoffeeMeetTests/Info.plist;
+				INFOPLIST_FILE = ChizeTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -621,18 +641,18 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CoffeeMeet.app/CoffeeMeet";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chize.app/Chize";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5D2A7B2BF747F715C0D1BD98 /* Pods-CoffeeMeet-CoffeeMeetTests.release.xcconfig */;
+			baseConfigurationReference = C9AAB9FE2EF06BAAB82A526D /* Pods-Chize-ChizeTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 98WJP6S25J;
-				INFOPLIST_FILE = CoffeeMeetTests/Info.plist;
+				INFOPLIST_FILE = ChizeTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -647,27 +667,27 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CoffeeMeet.app/CoffeeMeet";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chize.app/Chize";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4E6CF3D05F6DC5D4C6DD490 /* Pods-CoffeeMeet.debug.xcconfig */;
+			baseConfigurationReference = 13F134A1229592CC4CBE5E62 /* Pods-Chize.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = CoffeeMeet/CoffeeMeet.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Chize/Chize.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 98WJP6S25J;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = CoffeeMeet/Info.plist;
+				INFOPLIST_FILE = Chize/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -681,9 +701,9 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = CoffeeMeet;
+				PRODUCT_NAME = Chize;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Chise-new";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = ChizeAppStore;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -692,20 +712,20 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CE8A01008434BE56C9B164A4 /* Pods-CoffeeMeet.release.xcconfig */;
+			baseConfigurationReference = 492CCA307A2F82CC9B91589F /* Pods-Chize.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = CoffeeMeet/CoffeeMeet.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Chize/Chize.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 98WJP6S25J;
-				INFOPLIST_FILE = CoffeeMeet/Info.plist;
+				INFOPLIST_FILE = Chize/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -719,9 +739,9 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = CoffeeMeet;
+				PRODUCT_NAME = Chize;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Chise-new";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = ChizeAppStore;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -871,7 +891,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "CoffeeMeetTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ChizeTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -880,7 +900,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CoffeeMeet" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Chize" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -889,7 +909,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CoffeeMeet" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Chize" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

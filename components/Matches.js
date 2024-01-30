@@ -3,15 +3,21 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, ScrollView } fr
 import { supabase } from '../supabase';
 import UserContext from '../context/UserContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { sendPushNotification } from '../expoApi';
+import navigateToScreen from '../PushNotification';
 
-const Matches = () => {
+const Matches = ({navigation}) => {
     const [matches, setMatches] = useState(null);
-    const { user, pushNotificationToken } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [selectedMatch, setSelectedMatch] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
+        navigateToScreen().then(screenName => {
+            if (screenName) {
+              navigation.navigate(screenName);
+            }
+        });
+
         const getMatchesAndPosts = async () => {
             setMatches([]);
             try {
@@ -32,7 +38,8 @@ const Matches = () => {
                   const { data: postsData, error: postsError } = await supabase
                     .from('posts')
                     .select('*')
-                    .eq('user_id', otherUserId);
+                    .eq('user_id', otherUserId)
+                    .eq('active', true);
 
                   if (postsError) {
                     console.error('Error fetching posts:', postsError.message);
@@ -75,7 +82,6 @@ const Matches = () => {
             'postgres_changes',
             { event: '*', schema: 'public', table: 'matches' },
             (payload) => {
-                handleSendNotification();
                 getMatchesAndPosts();
             })
             .subscribe();
@@ -84,14 +90,6 @@ const Matches = () => {
         matchesSubscription.unsubscribe();
       };
     }, []);
-
-    const handleSendNotification = () => {
-        const expoPushToken = pushNotificationToken; // Replace with the recipient's Expo push token
-        const notificationTitle = 'Chize';
-        const notificationMessage = 'You have a request!';
-
-        sendPushNotification(expoPushToken, notificationTitle, notificationMessage);
-    };
 
     const handleDecline = async () => {
         try {
@@ -189,7 +187,7 @@ const styles = StyleSheet.create({
     },
     postImage: {
         width: '100%',
-        height: 400,
+        height: 500,
     },
     interestsContainer: {
         flexDirection: 'row',
@@ -223,7 +221,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: 'white',
         alignItems: 'center',
-        paddingVertical: 20,
+        paddingTop: 20,
     },
     postDetails: {
         borderRadius: 10,

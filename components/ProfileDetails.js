@@ -1,85 +1,99 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { View, Text, StyleSheet} from 'react-native';
 import { supabase } from '../supabase';
 import UserContext from '../context/UserContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { REACT_NATIVE_GOOGLE_PLACE } from '@env';
-import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Map from './Map';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import Purchases from 'react-native-purchases';
 
 const ProfileDetails = ({ navigation }) => {
-    const {user, setUser, setCurrLocation, setCurrPlaceId, currLocation, setActivePost, activePost, pushNotificationToken} = useContext(UserContext);
-    const [suggestedPlaces, setSuggestedPlaces] = useState([]);
+    const {
+        user,
+        setUser,
+        setCurrPlaceId,
+        currLocation,
+        setActivePost,
+        activePost,
+    } = useContext(UserContext);
 
-    const fetchRecordsByPlaceId = async (placeIds) => {
+    const checkIfRowExists = async (deviceToken, subscriptionValue) => {
         try {
-            const { data, error } = await supabase
-                .from('posts')
-                .select()
-                .in('place_id', placeIds)
-                .limit(1); // Add .limit(1) to select only one record
+          // Send a select query to the Supabase table
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .filter('deviceToken', 'eq', deviceToken)
+            .filter('subscriptionType', 'eq', subscriptionValue)
+            .not('user_id', 'eq', user?.user_id);
 
-            if (error) {
-                return [];
-            }
+          if (error) {
+            console.error('Error fetching data:', error);
+            return false; // Handle the error as needed
+          }
 
-            return data;
+          // If data exists, the row with the specified device_token and subscription value exists
+          if (data && data.length > 0) {
+            return true;
+          } else {
+            return false;
+          }
         } catch (error) {
-            return [];
+          console.error('Error checking if row exists:', error);
+          return false; // Handle the error as needed
         }
     };
 
-    const getPlaceIds = async (latitude, longitude, radius) => {
-        try {
-          const response = await axios.get(
-            'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
-            {
-              params: {
-                location: `${latitude},${longitude}`,
-                radius,
-                key: REACT_NATIVE_GOOGLE_PLACE,
-                keyword: 'coffee shops',
-              },
+    const performSubscriptionCheck = async () => {
+        const customerInfo = await Purchases.getCustomerInfo();
+        if (typeof customerInfo?.entitlements.active.chizepremium !== 'undefined') {
+            try {
+                const rowExists = await checkIfRowExists(user?.deviceToken, 'premium');
+                // If the row exists, update user subscriptionType to 'premium'
+                if (!rowExists) {
+                    setUser({
+                        ...user,
+                        subscriptionType: 'premium',
+                    });
+                    await supabase
+                        .from('profiles')
+                        .update({
+                            subscriptionType: 'premium',
+                        })
+                        .eq('user_id', user?.user_id)
+                        .select();
+                } else {
+                    // If the row doesn't exist, update user subscriptionType to null
+                    setUser({
+                        ...user,
+                        subscriptionType: null,
+                    });
+                    await supabase
+                        .from('profiles')
+                        .update({
+                            subscriptionType: null,
+                        })
+                        .eq('user_id', user?.user_id)
+                        .select();
+                }
+            } catch (error) {
+                console.log('Error performing subscription check:', error);
             }
-          );
-
-          if (response.data.results) {
-            const placeIds = response.data.results.map((result) => result.place_id);
-            return placeIds;
-          }
-        } catch (error) {
-          console.log('Error getting place IDs:', error);
-          return [];
         }
-
-        return [];
     };
 
     useEffect(() => {
-        const fetchSuggestedPlaces = async () => {
-          if (currLocation?.coords) {
-            try {
-              const googlePlaceIds = await getPlaceIds(
-                currLocation.coords.latitude,
-                currLocation.coords.longitude,
-                500
-              );
-
-              const matchedRecords = await fetchRecordsByPlaceId(googlePlaceIds);
-              setSuggestedPlaces(matchedRecords);
-            } catch (error) {
-              setSuggestedPlaces([]);
-            }
-          }
+        const fetchSubscriptionData = async () => {
+            await performSubscriptionCheck();
         };
-
         const fetchUserActivePost = async () => {
             try {
                 const { data, error } = await supabase
                     .from('posts')
                     .select('*')
-                    .eq('user_id', user.user_id);
+                    .eq('user_id', user.user_id)
+                    .eq('active', true);
 
                 if (error) {
                     return;
@@ -87,7 +101,7 @@ const ProfileDetails = ({ navigation }) => {
 
                 if (data) {
                     setActivePost(data[0]);
-                    setCurrPlaceId(data[0].place_id);
+                    setCurrPlaceId(data[0]?.place_id);
                 }
             } catch (error) {
                 console.log(error);
@@ -104,19 +118,100 @@ const ProfileDetails = ({ navigation }) => {
             }
         )
         .subscribe();
+
+              // Add the event handlers for push notifications
+        const handlePushNotifications = () => {
+            // Register the event listeners for push notifications
+            PushNotificationIOS.addEventListener('register', onRegistered);
+            PushNotificationIOS.addEventListener(
+                'registrationError',
+                onRegistrationError,
+            );
+
+            PushNotificationIOS.requestPermissions({
+                alert: true,
+                badge: true,
+                sound: true,
+                critical: true,
+            }).then(
+            (data) => {
+                console.log('PushNotificationIOS.requestPermissions', data);
+            },
+            (data) => {
+                console.log('PushNotificationIOS.requestPermissions failed', data);
+            },
+            );
+        };
+
+        handlePushNotifications();
         fetchUserActivePost();
-        fetchSuggestedPlaces();
-    }, [currLocation?.coords]);
+
+        if (user?.name) {
+            fetchSubscriptionData();
+        }
+
+        return () => {
+            PushNotificationIOS.removeEventListener('register');
+            PushNotificationIOS.removeEventListener('registrationError');
+        };
+    }, []);
+
+        // Add the event handlers for push notifications
+    const onRegistered = (deviceToken) => {
+        console.log(deviceToken);
+        const setDeviceToken = async () => {
+            try {
+              if (deviceToken) {
+                const { error } = await supabase
+                .from('profiles')
+                .update({
+                    deviceToken,
+                })
+                .eq('user_id', user.user_id)
+                .select();
+
+                if (error) {
+                  console.log(error);
+                }
+              }
+            } catch (e) {
+              console.log(e);
+            }
+        };
+
+        if (user?.user_id) {
+            setDeviceToken();
+        }
+    };
+
+    const onRegistrationError = (error) => {
+        console.log('Failed To Register For Remote Push', error);
+    };
 
     return (
         <View style={styles.container}>
-            {user?.name &&
+            {(user && user?.details) &&
                 <>
                     <View style={styles.detailContainer}>
-                        <Icon name="account" size={26}/><Text style={styles.name}>{user?.name}</Text>
+                        <View style={styles.accountContainer}>
+                            <Text style={styles.name}>{user?.name}</Text>{user?.subscriptionType ? <View style={styles.crown}><Icon name="crown-circle-outline" color={'gold'} size={26}/></View> : ''}
+                            <TouchableOpacity
+                                style={styles.pencil}
+                                onPress={() => navigation.navigate('ProfileEdit')}
+                            >
+                                <Icon name="pencil-outline" size={26}/>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.settingContainer}>
+                            <TouchableOpacity
+                                style={styles.settings}
+                                onPress={() => navigation.navigate('Settings')}
+                            >
+                                <Icon name="cog-outline" size={26}/>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <Text style={styles.details}>{user?.details}</Text>
-                    <Text style={styles.gender}>{user?.gender}</Text>
                     <View style={styles.interestsContainer}>
                         {user?.interests && user?.interests.map((interest) => (
                             <Text style={styles.interest} key={interest}>{interest}</Text>
@@ -124,65 +219,37 @@ const ProfileDetails = ({ navigation }) => {
                     </View>
                 </>
             }
-            {activePost &&
-                <>
-                    <Text style={styles.activeName}>Active Post</Text>
-                    <Text style={styles.placeName}>{activePost.location}</Text>
-                </>
-            }
-
-            <View style={styles.profileOptionsContainer}>
-            <TouchableOpacity onPress={
-                () => {
-                    navigation.navigate('ProfileEdit');
-                }
-            } title="Edit Profile">
-                <Text style={styles.editProfiles}>
-                    Edit Profile
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={async () => {
-                try {
-                    if (supabase && supabase.auth.getSession()) {
-                        await AsyncStorage.removeItem('supabase-token');
-                        await AsyncStorage.removeItem('supabase-reftoken');
-                        await supabase.auth.signOut();
-                        setUser(null);
-                        setCurrLocation(null);
-                        setCurrPlaceId(null);
-                        setActivePost(null);
-                    }
-                } catch (error) {
-                    console.error('Error signing out:', error);
-                }
-            }
-            }>
-                <Text style={styles.signOut}>Sign Out</Text>
-            </TouchableOpacity>
-            </View>
+            {activePost && <Map activepost={activePost} />}
+            {currLocation && !activePost && <Map activepost={activePost} />}
         </View>
     )
 };
 
 const styles = StyleSheet.create({
+    accountContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'baseline',
+    },
+    profileOptionsContainer: {
+        marginBottom: 100,
+    },
     placeName: {
         fontSize: 20,
-        marginBottom: 50,
     },
     activeName: {
         fontSize: 24,
-        marginBottom: 10,
         fontWeight: 'bold',
+        marginBottom: 10,
     },
     detailContainer: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     interestsContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginBottom: 50,
+        marginBottom: 35,
         marginHorizontal: -5,
     },
     interest: {
@@ -191,6 +258,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 20,
         margin: 5,
+        overflow: 'hidden',
     },
     editProfiles: {
         textAlign: 'center',
@@ -209,16 +277,19 @@ const styles = StyleSheet.create({
         paddingTop: '15%',
         backgroundColor: '#ffffff',
     },
+    crown: {
+        paddingRight: 7,
+    },
     name: {
         fontSize: 26,
         fontWeight: 'bold',
         marginBottom: 10,
-        marginLeft: 3,
+        marginRight: 3,
         marginTop: '2%',
     },
     details: {
         fontSize: 16,
-        marginBottom: 10,
+        marginBottom: 15,
     },
     gender: {
         fontSize: 16,

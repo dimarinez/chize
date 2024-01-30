@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Animated } from 'react-native';
 import { supabase } from '../supabase';
 import UserContext from '../context/UserContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -7,43 +7,55 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const PostFeed = () => {
   const [posts, setPosts] = useState([]);
   const { currPlaceId, user, activePost, setActivePost } = useContext(UserContext);
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
+  const fadeAnim = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data: postsData, error } = await supabase
+        const { data: postsData, error: postsError } = await supabase
           .from('posts')
           .select('*')
           .eq('place_id', currPlaceId)
-          .eq('gender', 'male');
+          .eq('preference', user.preference)
+          .eq('active', true)
+          .neq('user_id', user.user_id);
 
-        if (error) {
-          console.log('Error fetching posts:', error);
+        if (postsError) {
+          console.log('Error fetching posts:', postsError);
         } else {
-          // Format the interests array for each post
           const formattedPosts = [];
+
           for (const post of postsData) {
-            const { data: profileData, error: profileError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', post.user_id);
-            if (profileError) {
-              console.log('Error fetching sender profile:', profileError);
-            } else {
+            try {
+              const { data: profileData, error: profileError } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('user_id', post.user_id);
+
+              if (profileError) {
+                console.log('Error fetching sender profile:', profileError);
+              } else {
                 const profile = profileData[0]; // Assuming there's only one profile per user
                 const interests = profile?.interests || [];
                 const formattedInterests = interests.join(', ');
 
                 formattedPosts.push({
-                    ...post,
-                    profiles: {
-                        ...profile,
-                        interests: formattedInterests,
-                    },
+                  ...post,
+                  profiles: {
+                    ...profile,
+                    interests: formattedInterests,
+                  },
                 });
+              }
+            } catch (profileError) {
+              console.log('Error fetching sender profile:', profileError);
             }
           }
-          setPosts(formattedPosts);
+
+          if (formattedPosts.length > 0) {
+            setPosts(formattedPosts);
+          }
         }
       } catch (error) {
         console.log('Error fetching posts:', error);
@@ -55,6 +67,12 @@ const PostFeed = () => {
       setPosts([]); // Clear the previous posts before fetching new ones
       fetchPosts();
     }
+
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500, // Adjust the duration as needed
+      useNativeDriver: true,
+    }).start();
 
     // Subscribe to real-time changes in the "posts" table
     const postsSubscription = supabase
@@ -84,7 +102,6 @@ const PostFeed = () => {
           .eq('sender_id', post.profiles.user_id);
 
         if (requestData?.length) {
-          console.log(requestData);
           const { error } = await supabase
             .from('matches')
             .insert([
@@ -92,6 +109,8 @@ const PostFeed = () => {
                 user1_id: user_id,
                 user2_id: post.profiles.user_id,
                 place_id: currPlaceId,
+                user1_deviceToken: user.deviceToken,
+                user2_deviceToken: post.profiles.deviceToken,
               },
             ]);
 
@@ -116,6 +135,7 @@ const PostFeed = () => {
                 sender_id: user_id,
                 sender_photo: activePost.photo,
                 receiver_id: post.profiles.user_id,
+                receiver_deviceToken: post.profiles.deviceToken,
                 sender_location: activePost.locationDescription,
                 place_id: currPlaceId,
               },
@@ -135,46 +155,71 @@ const PostFeed = () => {
           const { error: errorMessage } = await supabase
             .from('posts')
             .update({ requests: activeRequests })
-            .eq('user_id', user.user_id);
+            .eq('user_id', user.user_id)
+            .eq('active', true);
 
           setActivePost({...activePost, requests: activeRequests});
+
+          setCurrentPostIndex(currentPostIndex + 1);
 
           if (errorMessage) {
             console.log('Error updating requests:', errorMessage);
           } else {
             console.log('Requests updated successfully!');
           }
-        } catch (error) {
-          console.log('Error updating requests:', error.message);
-        }
-
-        setPosts((prevPosts) =>
-          prevPosts.map((prevPost) =>
-            prevPost.id === post.id ? { ...prevPost, requested: true } : prevPost
-          )
-        );
+        } catch (e) {}
       } catch (error) {
         console.log('Error calling RPC:', error);
       }
     }
   };
 
+  const handleDecline = async (post) => {
+    try {
+      const activeDeclines = activePost?.declines || [];
+      activeDeclines.push(post.id);
+
+      await supabase
+        .from('posts')
+        .update({ declines: activeDeclines })
+        .eq('user_id', user.user_id)
+        .eq('active', true);
+
+      setActivePost({...activePost, declines: activeDeclines});
+      setCurrentPostIndex(currentPostIndex + 1);
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={styles.container}>
-        {posts && posts.length > 0 ? (
-        posts.map((post) => (
-          <View key={post.id} style={styles.postContainer}>
-            <Text style={styles.postName}>{post.profiles.name}</Text>
+        {activePost && posts?.length && posts.length !== currentPostIndex ? (
+          !activePost?.requests?.includes(posts[currentPostIndex].id.toString()) &&
+          !activePost?.declines?.includes(posts[currentPostIndex].id.toString()) ? (
+            <Animated.View
+              key={posts[currentPostIndex].id}
+              style={{
+                ...styles.postContainer,
+                opacity: fadeAnim,
+              }}
+            >
+            <Text style={styles.postName}>{posts[currentPostIndex].profiles.name}</Text>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: post.photo }} style={styles.postImage} />
-              {activePost.requests && activePost.requests?.includes(post.id.toString()) ? (
+              <Image source={{ uri: posts[currentPostIndex].photo }} style={styles.postImage} />
+              <TouchableOpacity style={styles.declineButton} onPress={() => {
+                handleDecline(posts[currentPostIndex]);
+              }}>
+                <Icon name="window-close" size={24} color="#000" />
+              </TouchableOpacity>
+              {activePost?.requests && activePost?.requests?.includes(posts[currentPostIndex].id.toString()) ? (
                 <View style={styles.heartButton}>
-                  <Icon name="hand-wave" size={24} color="#FF5A5F" />
+                  <Icon name="emoticon-wink" size={24} color="#FF5A5F" />
                 </View>
               ) : (
-                <TouchableOpacity style={styles.heartButton} onPress={() => handleRequest(post)}>
-                  <Icon name="hand-wave-outline" size={24} color="#FF5A5F" />
+                <TouchableOpacity style={styles.heartButton} onPress={() => handleRequest(posts[currentPostIndex])}>
+                  <Icon name="emoticon-happy-outline" size={24} color="#FF5A5F" />
                 </TouchableOpacity>
               )}
             </View>
@@ -182,30 +227,34 @@ const PostFeed = () => {
               <View style={styles.attributes}>
                 <View style={styles.borderRightDetail}>
                   <Text style={styles.postDetail}>
-                    <Icon name="cake-variant-outline" size={18} color="#000000" /> {post.profiles.age}
+                    <Icon name="cake-variant-outline" size={18} color="#000000" /> {posts[currentPostIndex].profiles.age}
                   </Text>
                 </View>
                 <Text style={styles.postDetail}>
-                  <Icon name="ruler" size={18} color="#000000" /> {post.profiles.height.replace(/"{2}$/g, '"')}
+                  <Icon name="ruler" size={18} color="#000000" /> {posts[currentPostIndex].profiles.height.replace(/"{2}$/g, '"')}
                 </Text>
               </View>
-              <Text style={styles.postBio}>{post.profiles.details}</Text>
+              <Text style={styles.postBio}>{posts[currentPostIndex].profiles.details}</Text>
               <View style={styles.interestsContainer}>
-                {post?.profiles.interests &&
-                  post?.profiles.interests.split(',').map((interest) => (
+                {posts[currentPostIndex]?.profiles.interests &&
+                  posts[currentPostIndex]?.profiles.interests.split(',').map((interest) => (
                     <Text style={styles.interest} key={interest}>
                       {interest}
                     </Text>
                   ))}
               </View>
             </View>
-          </View>
-        ))
+          </Animated.View>
+          ) : (
+            <View>
+              <Text style={styles.titleNone}>No more posts available.</Text> 
+            </View>
+          )
       ) : (
         <View>
-          {activePost ? (
+          {activePost || posts.length === 0 ? (
             <Text style={styles.titleNone}>No posts available.</Text> 
-          ): (
+          ) : (
             <Text style={styles.titleNone}>Post to see who's available :)</Text> 
           )}
         </View>
@@ -216,6 +265,15 @@ const PostFeed = () => {
 };
 
 const styles = StyleSheet.create({
+  declineButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    borderRadius: 50,
+    zIndex: 1,
+},
   titleNone: {
     textAlign: 'left',
     fontSize: 22,
@@ -264,13 +322,13 @@ const styles = StyleSheet.create({
   },
   postImage: {
     width: '100%',
-    height: 400,
+    height: 500,
   },
   attributes: {
     flexDirection: 'row',
     backgroundColor: 'white',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingTop: 20,
   },
   postName: {
     fontSize: 25,

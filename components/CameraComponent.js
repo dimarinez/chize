@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import UserContext from '../context/UserContext';
 
 const CameraComponent = () => {
   const camera = useRef(null);
@@ -18,6 +19,10 @@ const CameraComponent = () => {
   const navigation = useNavigation();
   const [showCamera, setShowCamera] = useState(true);
   const [imageSource, setImageSource] = useState('');
+  const {
+    setImage,
+    image,
+  } = useContext(UserContext);
 
   const toggleCameraType = () => {
     const newCameraType = cameraType === 'back' ? 'front' : 'back';
@@ -29,7 +34,8 @@ const CameraComponent = () => {
     const imageData = {
       uri: `file://'${imageSource}`,
     }
-    navigation.navigate('PostForm', {photo: imageData});
+    setImage(imageData);
+    navigation.navigate('PostForm');
   }
 
   useEffect(() => {
@@ -37,7 +43,7 @@ const CameraComponent = () => {
       const newCameraPermission = await Camera.requestCameraPermission();
     }
     getPermission();
-  }, []);
+  }, [image]);
 
   const capturePhoto = async () => {
     if (camera.current !== null) {
@@ -62,6 +68,7 @@ const CameraComponent = () => {
             isActive={showCamera}
             photo={true}
           />
+            <Image style={styles.emptyImage} />
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.camButton}
@@ -110,6 +117,14 @@ const CameraComponent = () => {
 }
 
 const styles = StyleSheet.create({
+  emptyImage: {
+    height: 500,
+    borderWidth: 1,
+    borderColor: '#fff',
+    right: 20,
+    left: 20,
+    position: 'absolute',
+  },
   flipButton: {
     position: 'absolute',
     right: 30,
@@ -151,7 +166,6 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 40,
-    //ADD backgroundColor COLOR GREY
     backgroundColor: '#B2BEB5',
     alignSelf: 'center',
     borderWidth: 4,

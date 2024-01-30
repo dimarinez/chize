@@ -13,115 +13,117 @@ import UserContext from '../context/UserContext';
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../supabase';
 import Geolocation from 'react-native-geolocation-service';
-import * as Notifications from 'expo-notifications';
 
 const UserStack = ({ session }) => {
-  const { setUser, setCurrLocation, user, setPushNotificationToken, activePost, setActivePost, setCurrPlaceId, currPlaceId, setImage, setLocationDescription } = useContext(UserContext);
-  const [location, setLocation] = useState(null);
+  const { setUser, setCurrLocation, user, setWatchId, currLocation } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
 
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371e3; // Earth's radius in meters
-    const φ1 = (lat1 * Math.PI) / 180; // Convert latitude to radians
-    const φ2 = (lat2 * Math.PI) / 180;
-    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+// const calculateDistance = (lat1, lon1, lat2, lon2) => {
+//     const R = 6371e3; // Earth's radius in meters
+//     const φ1 = (lat1 * Math.PI) / 180; // Convert latitude to radians
+//     const φ2 = (lat2 * Math.PI) / 180;
+//     const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+//     const Δλ = ((lon2 - lon1) * Math.PI) / 180;
 
-    const a =
-      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//     const a =
+//       Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+//       Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+//     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    const distance = R * c;
-    return distance;
-};
+//     const distance = R * c;
+//     return distance;
+// };
 
-const removeActivePost = async () => { 
-  try {
-    await supabase
-        .from('matches')
-        .delete()
-        .or(`user1_id.eq.${user.user_id},user2_id.eq.${user.user_id}`)
-        .eq('place_id', currPlaceId);
+// const removeActivePost = async () => { 
+//   try {
+//     await supabase
+//         .from('matches')
+//         .delete()
+//         .or(`user1_id.eq.${user.user_id},user2_id.eq.${user.user_id}`)
+//         .eq('place_id', currPlaceId);
 
-    await supabase
-        .from('requests')
-        .delete()
-        .or(`sender_id.eq.${user.user_id},receiver_id.eq.${user.user_id}`)
-        .eq('place_id', currPlaceId);
+//     await supabase
+//         .from('requests')
+//         .delete()
+//         .or(`sender_id.eq.${user.user_id},receiver_id.eq.${user.user_id}`)
+//         .eq('place_id', currPlaceId);
 
-    const { error: postError } = await supabase
-        .from('posts')
-        .delete()
-        .eq('user_id', user.user_id);
+//     const { error: postError } = await supabase
+//         .from('posts')
+//         .delete()
+//         .eq('user_id', user.user_id)
+//         .eq('active', true);
 
-    if (postError) {
-      console.log(postError);
+//     if (postError) {
+//       console.log(postError);
+//       return;
+//     }
+
+//     setImage(null);
+//     setLocationDescription('');
+//     setActivePost(null);
+//     setCurrPlaceId(null);
+
+//     const { error: emptyError } = await supabase
+//       .storage
+//       .emptyBucket(user.user_id);
+
+//     if (emptyError) {
+//       console.log(emptyError);
+//     }
+//   } catch (e) {
+//     console.log(e.message);
+//   }
+// };
+
+// const handleLocationCheck = async (position) => {
+//     const distanceInMeters = calculateDistance(
+//         position.coords.latitude,
+//         position.coords.longitude,
+//         activePost.coords.lat,
+//         activePost.coords.lng
+//     );
+
+//     console.log(distanceInMeters);
+//     // Now you can check if the distance is greater than 10 meters and delete the post if needed
+//     if (distanceInMeters > 100) {
+//         await removeActivePost();
+//     } else {
+//         return true;
+//     }
+// }
+
+const getLocation = async () => {
+  if (currLocation) {
+      // Location already exists, no need to fetch it again
       return;
-    }
-
-    setImage(null);
-    setLocationDescription('');
-    setActivePost(null);
-    setCurrPlaceId(null);
-
-    const { error: emptyError } = await supabase
-      .storage
-      .emptyBucket(user.user_id);
-
-    if (emptyError) {
-      console.log(emptyError);
-    }
-  } catch (e) {
-    console.log(e.message);
   }
-};
 
-const handleLocationCheck = async (position) => {
-    const distanceInMeters = calculateDistance(
-        position.coords.latitude,
-        position.coords.longitude,
-        activePost.coords.lat,
-        activePost.coords.lng
-    );
+  const hasPermission = await hasLocationPermission();
 
-    console.log(distanceInMeters);
-    // Now you can check if the distance is greater than 10 meters and delete the post if needed
-    if (distanceInMeters > 100) {
-        await removeActivePost();
-    } else {
-        return true;
-    }
-};
-
-
-  const getLocation = async () => {
-    const hasPermission = await hasLocationPermission();
-
-    if (!hasPermission) {
+  if (!hasPermission) {
       return;
-    }
+  }
 
-    Geolocation.watchPosition(
+  const watchId = Geolocation.watchPosition(
       position => {
-        setLocation(position);
-        setCurrLocation(position);
-        if (activePost) {
-          handleLocationCheck(position);
-        }
+          setCurrLocation(position);
+          // if (activePost) {
+          //   handleLocationCheck(position);
+          // }
       },
       error => {
-        Alert.alert(`Code ${error.code}`, error.message);
-        setLocation(null);
-        console.log(error);
+          Alert.alert(`Code ${error.code}`, error.message);
+          console.log(error);
       },
       {
-        enableHighAccuracy: true,
-        distanceFilter: 10, // Update location if the user moves 10 meters
+          enableHighAccuracy: true,
+          distanceFilter: 10, // Update location if the user moves 10 meters
       },
-    );
-  };
+  );
+  setWatchId(watchId);
+};
 
   const hasLocationPermission = async () => {
     if (Platform.OS === 'ios') {
@@ -195,31 +197,6 @@ const handleLocationCheck = async (position) => {
 };
 
 useEffect(() => {
-  const registerForPushNotificationsAsync = async () => {
-    try {
-      if (Platform.OS === 'ios') {
-        const { status } = await Notifications.getPermissionsAsync();
-        if (status !== 'granted') {
-          const { status: finalStatus } = await Notifications.requestPermissionsAsync();
-          if (finalStatus !== 'granted') {
-            console.log('Failed to get push token for push notification!');
-            return;
-          }
-        }
-      }
-
-      if (Platform.OS !== 'web') {
-        const token = (await Notifications.getExpoPushTokenAsync({
-          projectId: '4b8ea4ff-b816-4304-af98-dd2bb21d2385',
-        })).data;
-        setPushNotificationToken(token);
-        // Send the token to your server to handle push notifications.
-      }
-    } catch (error) {
-      console.log('Error getting push token:', error);
-    }
-  };
-
   const fetchUser = async () => {
     try {
       if (session) {
@@ -234,8 +211,6 @@ useEffect(() => {
           navigation.navigate('SignUpSlider');
           setUser(session.user);
         }
-
-        getLocation();
       }
     } catch (e) {
       console.log(e);
@@ -244,8 +219,13 @@ useEffect(() => {
     }
   };
 
+  const fetchLocation = async () => {
+    await getLocation();
+  };
+
+  fetchLocation();
+
   fetchUser();
-  registerForPushNotificationsAsync();
 }, [session, setUser, navigation]);
 
 if (isLoading) {

@@ -8,11 +8,12 @@ export const UserProvider = ({ children }) => {
   const [currPlaceId, setCurrPlaceId] = useState('');
   const [activePost, setActivePost] = useState(null);
   const [image, setImage] = useState(null);
+  const [watchId, setWatchId] = useState(null);
+  const [locationTypeChange, setLocationTypeChange] = useState(false);
   const [locationDescription, setLocationDescription] = useState('');
-  const [pushNoticationToken, setPushNotificationToken] = useState(null);
 
   return (
-    <UserContext.Provider value={{ user, setUser, currLocation, setCurrLocation, currPlaceId, setCurrPlaceId, setActivePost, activePost, pushNoticationToken, setPushNotificationToken, image, setImage, locationDescription, setLocationDescription }}>
+    <UserContext.Provider value={{locationTypeChange, setLocationTypeChange ,user, setUser, currLocation, setCurrLocation, currPlaceId, setCurrPlaceId, setActivePost, activePost, image, setImage, locationDescription, setLocationDescription, watchId, setWatchId }}>
       {children}
     </UserContext.Provider>
   );

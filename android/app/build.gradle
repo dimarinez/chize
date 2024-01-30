@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.coffeemeet"
+    namespace "com.chize"
     defaultConfig {
-        applicationId "com.coffeemeet"
+        applicationId "com.chize"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

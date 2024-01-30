@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Button, TextInput, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, ScrollView, Platform, TextInput, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-date-picker';
@@ -15,6 +15,8 @@ const slides = [
     { id: '4', label: 'Slide 4', component: Slide4 },
     { id: '5', label: 'Slide 5', component: Slide5 },
     { id: '6', label: 'Slide 6', component: Slide6 },
+    { id: '7', label: 'Slide 7', component: Slide7 },
+    { id: '8', label: 'Slide 8', component: Slide8 },
 ];
 
 const validateInputs = (value) => {
@@ -85,9 +87,47 @@ function Slide2({ setGender, gender, setNextState }) {
     );
 }
 
+function Slide3({ setPreference, preference, setNextState }) {
+
+    useEffect(() => {
+        setNextState(false);
+    });
+    return (
+        <View>
+            <Text style={styles.title}>What are you looking for?</Text>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={[styles.button, preference === 'date' && styles.activeButton]}
+                    onPress={() => setPreference('date')}
+                >
+                    <Text style={[styles.buttonText, preference === 'date' && styles.activeButtonText]}>
+                        Date
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.button, preference === 'friends' && styles.activeButton]}
+                    onPress={() => setPreference('friends')}
+                >
+                    <Text style={[styles.buttonText, preference === 'friends' && styles.activeButtonText]}>
+                        Friends
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.button, preference === 'business' && styles.activeButton]}
+                    onPress={() => setPreference('business')}
+                >
+                    <Text style={[styles.buttonText, preference === 'business' && styles.activeButtonText]}>
+                        Business
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
+}
+
 
 // Slide 3 component
-function Slide3({ setDetails, details, setNextState }) {
+function Slide4({ setDetails, details, setNextState }) {
     const [isEmpty, setIsEmpty] = useState(true);
 
     useEffect(() => {
@@ -101,11 +141,12 @@ function Slide3({ setDetails, details, setNextState }) {
     };
     return (
         <View>
-            <Text style={styles.title}>A little about yourself/what you're looking for</Text>
+            <Text style={styles.title}>A little about yourself</Text>
             <TextInput
                 style={styles.input}
-                multiline
                 value={details}
+                multiline
+                maxLength={350}
                 placeholder="Enter details here"
                 onChangeText={handleSetDetails}
             />
@@ -113,7 +154,32 @@ function Slide3({ setDetails, details, setNextState }) {
     );
 }
 
-function Slide4({ setAge, age, selectedDate, setSelectedDate, setNextState }) {
+// Slide 3 component
+function Slide5({ setHometown, hometown, setNextState }) {
+    const [isEmpty, setIsEmpty] = useState(true);
+
+    useEffect(() => {
+        setIsEmpty(validateInputs(hometown));
+        setNextState(isEmpty);
+    });
+    const handleSetHometown = (text) => {
+        setHometown(text);
+        setIsEmpty(validateInputs(text));
+        setNextState(isEmpty);
+    };
+    return (
+        <View>
+            <Text style={styles.title}>Where is your hometown?</Text>
+            <TextInput
+                style={styles.input}
+                value={hometown}
+                onChangeText={handleSetHometown}
+            />
+        </View>
+    );
+}
+
+function Slide6({ setAge, age, selectedDate, setSelectedDate, setNextState }) {
     useEffect(() => {
         setNextState(false)
         calculateAge(selectedDate);
@@ -166,7 +232,7 @@ function Slide4({ setAge, age, selectedDate, setSelectedDate, setNextState }) {
 }
 
 // Slide 5 component
-function Slide5({ setHeight, feet, setFeet, inches, setInches, setNextState }) {
+function Slide7({ setHeight, feet, setFeet, inches, setInches, setNextState }) {
     useEffect(() => {
         setNextState(false);
     });
@@ -220,7 +286,7 @@ function Slide5({ setHeight, feet, setFeet, inches, setInches, setNextState }) {
     );
 }
 
-function Slide6({ setSelectedHobbies, selectedHobbies, setNextState }) {
+function Slide8({ setSelectedHobbies, selectedHobbies, setNextState }) {
     useEffect(() => {
         setNextState(false);
     });
@@ -230,12 +296,49 @@ function Slide6({ setSelectedHobbies, selectedHobbies, setNextState }) {
         'Sports',
         'Books',
         'Music',
-        'Art',
+        'Traveling',
         'Cooking',
-        'Travel',
+        'Hiking',
+        'Yoga',
+        'Movies',
+        'Gaming',
+        'Art',
+        'Wine tasting',
+        'Veganism',
         'Photography',
-        'Christianity',
+        'Meditation',
+        'Theatre',
+        'Dancing',
+        'Podcasts',
+        'Beach',
         'Gardening',
+        'Volunteering',
+        'Pets/Animals',
+        'Fashion',
+        'DIY Projects',
+        'Biking',
+        'Rock climbing',
+        'Surfing',
+        'Camping',
+        'Concerts',
+        'Jazz',
+        'Craft beer',
+        'Horseback riding',
+        'Scuba diving',
+        'Vegan/vegetarian',
+        'Songwriting',
+        'Writing',
+        'Fishing',
+        'Kayaking',
+        'Vintage',
+        'Tattoos',
+        'Jazz bars',
+        'Tea/Coffee enthusiast',
+        'Thrift shopping',
+        'Snowboarding/skiing',
+        'Stand-up comedy',
+        'Tech/Startups',
+        'Cultural festivals',
     ];
 
     const handleHobbyPress = (hobby) => {
@@ -244,7 +347,7 @@ function Slide6({ setSelectedHobbies, selectedHobbies, setNextState }) {
             setSelectedHobbies(selectedHobbies.filter((item) => item !== hobby));
         } else {
         // Hobby is not selected, add it to the array
-            if (selectedHobbies.length < 4) {
+            if (selectedHobbies.length < 6) {
                 setSelectedHobbies([...selectedHobbies, hobby]);
             }
         }
@@ -252,7 +355,9 @@ function Slide6({ setSelectedHobbies, selectedHobbies, setNextState }) {
 
     return (
         <View>
-            <Text style={styles.title}>Select your interests (up to 5)</Text>
+            <Text style={styles.title}>Select your interests (up to 6)</Text>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={styles.scrollbox} keyboardShouldPersistTaps="handled">
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={styles.hobbyButtonContainer}>
                 {hobbiesList.map((hobby) => (
                 <TouchableOpacity
@@ -267,6 +372,8 @@ function Slide6({ setSelectedHobbies, selectedHobbies, setNextState }) {
                 </TouchableOpacity>
                 ))}
             </View>
+            </TouchableWithoutFeedback>
+            </ScrollView>
         </View>
     );
 }
@@ -283,6 +390,8 @@ function FormSlides() {
     const [inches, setInches] = useState('0"');
     const [age, setAge] = useState(null);
     const [height, setHeight] = useState('');
+    const [preference, setPreference] = useState('date');
+    const [hometown, setHometown] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
     const [selectedDate, setSelectedDate] = useState(new Date('2005-01-01'));
     const [selectedHobbies, setSelectedHobbies] = useState([]);
@@ -293,44 +402,30 @@ function FormSlides() {
 
     const handleFormSubmit = async () => {
         try {
-            console.log(selectedHobbies, name,  gender, details, age, height);
             const { data, error } = await supabase
-            .from('profiles')
-            .update({
-              name,
-              gender,
-              details,
-              age,
-              height,
-              interests: selectedHobbies,
-            })
-            .eq('user_id', user.identities[0].user_id)
-            .select();
-
-            if (data?.length) {
-                setUser(data[0]);
-            } else {
-                const { data: catchUploadUser } = await supabase.from('profiles').insert([
-                    {
-                      user_id: user.identities[0].user_id,
-                      name,
-                      gender,
-                      details,
-                      age,
-                      height,
-                      interests: selectedHobbies,
-                    },
-                ]);
-                setUser(catchUploadUser[0]);
-            }
-
+                .from('profiles')
+                .update({
+                    name,
+                    gender,
+                    details,
+                    age,
+                    height,
+                    hometown,
+                    preference,
+                    interests: selectedHobbies,
+                })
+                .eq('user_id', user?.user_id || user?.identities[0]?.user_id)
+                .select();
             if (error) {
                 console.error(error);
-                return;
+            } else {
+                if (data) {
+                    setUser(data[0]);
+                }
+                navigation.navigate('UserStack');
             }
-            navigation.navigate('UserStack');
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 
@@ -373,6 +468,10 @@ function FormSlides() {
                     setAge={setAge}
                     height={height}
                     setHeight={setHeight}
+                    hometown={hometown}
+                    setHometown={setHometown}
+                    preference={preference}
+                    setPreference={setPreference}
                     setNextState={setNextState}
                     setSelectedHobbies={setSelectedHobbies}
                     selectedHobbies={selectedHobbies}
@@ -422,17 +521,27 @@ function ProgressBar({ currentSlide }) {
 const SignUpSlider = () => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : null}
+            >
             <View style={styles.container}>
                 <FormSlides />
             </View>
+            </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     );
-}
+};
 
 const styles = StyleSheet.create({
+    scrollbox: {
+        height: '85%',
+    },
     hobbyButtonContainer: {
+        paddingTop: 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
+        marginBottom: 10,
     },
     hobbyButton: {
         backgroundColor: '#eaeaea',
@@ -480,7 +589,7 @@ const styles = StyleSheet.create({
     progressBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 50,
+        marginBottom: 30,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -503,7 +612,7 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
     },
     progressItem: {
-        width: 50,
+        width: 36,
         height: 5,
         backgroundColor: '#CCCCCC',
         borderRadius: 5,
@@ -542,14 +651,14 @@ const styles = StyleSheet.create({
     navigationButton: {
         backgroundColor: '#FF5A5F',
         borderRadius: 8,
-        paddingVertical: 10,
+        paddingVertical: 15,
         marginTop: 20,
         paddingHorizontal: 20,
         marginBottom: 35,
     },
     buttonsContainer: {
         position: 'absolute',
-        bottom: 20,
+        bottom: 0,
         width: '100%',
     },
     activeButton: {

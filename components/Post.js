@@ -5,14 +5,22 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import PostForm from '../components/PostForm';
 import CameraComponent from '../components/CameraComponent';
 import { createStackNavigator } from '@react-navigation/stack';
+import navigateToScreen from '../PushNotification';
 
 const Stack = createStackNavigator();
 
-const Post = () => {
+const Post = ({navigation}) => {
+  useEffect(()=> {
+    navigateToScreen().then(screenName => {
+      if (screenName) {
+        navigation.navigate(screenName);
+      }
+    });
+  }, []);
 
   return (
     <Stack.Navigator

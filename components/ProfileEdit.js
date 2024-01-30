@@ -1,15 +1,29 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Platform, ScrollView, Alert, KeyboardAvoidingView, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { supabase } from '../supabase';
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../context/UserContext';
+import navigateToScreen from '../PushNotification';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Toast from 'react-native-toast-message';
 
 const ProfileEdit = () => {
     const [name, setName] = useState('');
     const [details, setDetails] = useState('');
     const [interests, setInterests] = useState([]);
+    const [preference, setPreference] = useState('');
     const navigation = useNavigation();
-    const {user, setUser, setCurrLocation, setCurrPlaceId, currLocation, setActivePost} = useContext(UserContext);
+    const {
+        user,
+        setUser,
+        setCurrPlaceId,
+        currLocation,
+        setActivePost,
+        activePost,
+        currPlaceId,
+        setImage,
+        setLocationDescription,
+      } = useContext(UserContext);
     const isSubmitDisabled = interests?.length < 3 || !details || !name;
 
     const handleSetName = text => {
@@ -22,75 +36,237 @@ const ProfileEdit = () => {
 
     const handleProfileSubmit = async () => {
         try {
-            const { error } = await supabase
-            .from('profiles')
-            .update({
-                name,
-                details,
-                interests,
-            })
-            .eq('user_id', user.user_id)
-            .select();
+            if (activePost && preference !== user.preference) {
+                Alert.alert(
+                    'Confirm Deletion',
+                    'Updating your preference will remove your current post. Are you sure?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Delete',
+                        style: 'destructive',
+                        onPress: async () => {
+                          try {
+                            await supabase
+                              .from('matches')
+                              .delete()
+                              .or(`user1_id.eq.${user.user_id},user2_id.eq.${user.user_id}`)
+                              .eq('place_id', currPlaceId);
 
-            if (error) {
-                console.error(error);
-                return;
+                            await supabase
+                              .from('requests')
+                              .delete()
+                              .or(
+                                `sender_id.eq.${user.user_id},receiver_id.eq.${user.user_id}`,
+                              )
+                              .eq('place_id', currPlaceId);
+
+                            const {error: postError} = await supabase
+                              .from('posts')
+                              .update({
+                                active: false,
+                              })
+                              .eq('user_id', user.user_id);
+
+                            if (postError) {
+                              console.log(postError);
+                              return;
+                            }
+
+                            setImage(null);
+                            setLocationDescription('');
+                            setActivePost(null);
+                            setCurrPlaceId(null);
+
+                            const {error: emptyError} = await supabase.storage.emptyBucket(
+                              user.user_id,
+                            );
+
+                            if (emptyError) {
+                                Toast.show({
+                                    type: 'error',
+                                    text1: 'Error',
+                                    text2: emptyError,
+                                });
+                            } else {
+                                const { error } = await supabase
+                                .from('profiles')
+                                .update({
+                                    name,
+                                    details,
+                                    interests,
+                                    preference,
+                                })
+                                .eq('user_id', user.user_id)
+                                .select();
+
+                                if (error) {
+                                    console.error(error);
+                                    return;
+                                } else {
+                                    Toast.show({
+                                        type: 'success',
+                                        text1: 'Success!',
+                                        text2: 'Your profile was successfully updated.',
+                                    });
+                                    setUser({
+                                        ...user,
+                                        name,
+                                        details,
+                                        interests,
+                                        preference,
+                                    });
+                                }
+                                navigation.navigate('ProfileDetails');
+                            }
+                          } catch (e) {
+                            console.log(e.message);
+                          }
+                        },
+                      },
+                    ],
+                    {cancelable: true},
+                );
             } else {
-                setUser({
-                    ...user,
+                const { error } = await supabase
+                .from('profiles')
+                .update({
                     name,
                     details,
                     interests,
-                });
+                    preference,
+                })
+                .eq('user_id', user.user_id)
+                .select();
+
+                if (error) {
+                    console.error(error);
+                    return;
+                } else {
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success!',
+                        text2: 'Your profile was successfully updated.',
+                    });
+                    setUser({
+                        ...user,
+                        name,
+                        details,
+                        interests,
+                        preference,
+                    });
+                }
+                navigation.navigate('ProfileDetails');
             }
         } catch (e) {
             console.log(e);
         }
-
-        navigation.navigate('ProfileDetails');
     };
 
     useEffect(() => {
+        navigateToScreen().then(screenName => {
+            if (screenName) {
+              navigation.navigate(screenName);
+            }
+        });
+
         if (user?.name) {
             setName(user?.name);
             setDetails(user?.details);
             setInterests(user?.interests || []);
+            setPreference(user?.preference || 'friends');
         }
     }, [user, currLocation]);
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.container}>
-                <View style={styles.formSection}>
-                    <Text style={styles.label}>Display Name:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Name"
-                        value={name}
-                        onChangeText={handleSetName}
-                    />
-                </View>
-
-                <View style={styles.formSection}>
-                    <Text style={styles.label}>Enter Details:</Text>
-                    <TextInput
-                        style={styles.textInput}
-                        multiline
-                        placeholder="Enter details here"
-                        value={details}
-                        onChangeText={handleSetDetails}
-                    />
-                </View>
-                <Interests interests={interests} setInterests={setInterests}/>
-                <TouchableOpacity onPress={handleProfileSubmit} 
-                    style={[styles.profileSubmit, isSubmitDisabled && styles.disabledButton]}
-                    disabled={isSubmitDisabled}>
-                    <Text style={styles.profileSubmitText}>update</Text>
+        <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                <TouchableOpacity
+                    style={styles.backArrow}
+                    onPress={() => {
+                        navigation.navigate('ProfileDetails');
+                    }}
+                >
+                    <Icon name="arrow-left" size={26}/>
                 </TouchableOpacity>
-            </View>
-        </TouchableWithoutFeedback>
+                    <View style={styles.formSection}>
+                        <Text style={styles.label}>Display Name:</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Name"
+                            value={name}
+                            onChangeText={handleSetName}
+                        />
+                    </View>
+
+                    <View style={styles.formSection}>
+                        <Text style={styles.label}>Enter Details:</Text>
+                        <TextInput
+                            style={styles.textInput}
+                            multiline
+                            placeholder="Enter details here"
+                            value={details}
+                            maxLength={350}
+                            onChangeText={handleSetDetails}
+                        />
+                    </View>
+                    <Preference preference={preference} setPreference={setPreference} />
+                    <Interests interests={interests} setInterests={setInterests}/>
+                </View>
+            </TouchableWithoutFeedback>
+        </ScrollView>
+        <View style={styles.floatButtonContainer}>
+            <TouchableOpacity onPress={handleProfileSubmit} 
+                style={[styles.profileSubmit, isSubmitDisabled && styles.disabledButton]}
+                disabled={isSubmitDisabled}>
+                <Text style={styles.profileSubmitText}>update</Text>
+            </TouchableOpacity>
+        </View>
+        </KeyboardAvoidingView>
     );
 };
+
+function Preference({ setPreference, preference }) {
+    return (
+        <View>
+            <Text style={styles.label}>What are you looking for?</Text>
+            <View style={styles.hobbyButtonContainer}>
+                <TouchableOpacity
+                    style={[styles.hobbyButton, preference === 'date' && styles.selectedButton]}
+                    onPress={() => setPreference('date')}
+                >
+                    <Text style={[styles.hobbyButtonText, preference === 'date' && styles.activeButtonText]}>
+                        Date
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.hobbyButton, preference === 'friends' && styles.selectedButton]}
+                    onPress={() => setPreference('friends')}
+                >
+                    <Text style={[styles.hobbyButtonText, preference === 'friends' && styles.activeButtonText]}>
+                       Friends
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.hobbyButton, preference === 'business' && styles.selectedButton]}
+                    onPress={() => setPreference('business')}
+                >
+                    <Text style={[styles.hobbyButtonText, preference === 'business' && styles.activeButtonText]}>
+                    Business
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
+}
 
 function Interests({interests, setInterests}) {
     const hobbiesList = [
@@ -98,12 +274,52 @@ function Interests({interests, setInterests}) {
         'Sports',
         'Books',
         'Music',
-        'Art',
-        'Cooking',
-        'Travel',
-        'Photography',
         'Christianity',
+        'Traveling',
+        'Cooking',
+        'Hiking',
+        'Yoga',
+        'Movies',
+        'Gaming',
+        'Art',
+        'Wine tasting',
+        'Veganism',
+        'Photography',
+        'Meditation',
+        'Theatre',
+        'Dancing',
+        'Podcasts',
+        'Beach',
         'Gardening',
+        'Volunteering',
+        'Spirituality',
+        'Pets/Animals',
+        'Fashion',
+        'DIY Projects',
+        'Biking',
+        'Rock climbing',
+        'Surfing',
+        'Camping',
+        'Concerts',
+        'Jazz',
+        'Craft beer',
+        'Horseback riding',
+        'Scuba diving',
+        'Vegan/vegetarian',
+        'Songwriting',
+        'Writing',
+        'Astronomy',
+        'Fishing',
+        'Kayaking',
+        'Vintage',
+        'Tattoos',
+        'Jazz bars',
+        'Tea/Coffee enthusiast',
+        'Thrift shopping',
+        'Snowboarding/skiing',
+        'Stand-up comedy',
+        'Tech/Startups',
+        'Cultural festivals',
     ];
 
     const handleHobbyPress = (hobby) => {
@@ -112,7 +328,7 @@ function Interests({interests, setInterests}) {
             setInterests(interests.filter((item) => item !== hobby));
         } else {
         // Hobby is not selected, add it to the array
-            if (interests.length < 5) {
+            if (interests.length < 6) {
                 setInterests([...interests, hobby]);
             }
         }
@@ -120,7 +336,7 @@ function Interests({interests, setInterests}) {
 
     return (
         <View>
-            <Text style={styles.label}>Select interests (up to 5):</Text>
+            <Text style={styles.label}>Select interests (up to 6):</Text>
             <View style={styles.hobbyButtonContainer}>
                 {hobbiesList && hobbiesList.map((hobby) => (
                 <TouchableOpacity
@@ -140,8 +356,14 @@ function Interests({interests, setInterests}) {
 }
 
 const styles = StyleSheet.create({
+    floatButtonContainer: {
+        padding: 20
+    },
     disabledButton: {
         opacity: 0.3,
+    },
+    backArrow: {
+        marginBottom: 20,
     },
     profileSubmitText: {
         color: 'white',
@@ -152,10 +374,8 @@ const styles = StyleSheet.create({
     profileSubmit: {
         backgroundColor: '#FF5A5F',
         borderRadius: 8,
-        paddingVertical: 10,
-        marginTop: 20,
+        paddingVertical: 15,
         paddingHorizontal: 20,
-        marginBottom: 5,
     },
     hobbyButtonContainer: {
         flexDirection: 'row',
@@ -179,6 +399,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         paddingTop: '15%',
+        paddingBottom: 20,
     },
     formSection: {
         marginBottom: 20,

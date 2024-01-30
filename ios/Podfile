@@ -22,15 +22,15 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'CoffeeMeet' do
+target 'Chize' do
   use_expo_modules!
-  post_integrate do |installer|
-  begin
-      expo_patch_react_imports!(installer)
-    rescue => e
-      Pod::UI.warn e
-    end
-  end
+	  post_integrate do |installer|
+      begin
+        expo_patch_react_imports!(installer)
+	    rescue => e
+ 	      Pod::UI.warn e
+	    end
+	  end
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -52,7 +52,7 @@ target 'CoffeeMeet' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'CoffeeMeetTests' do
+  target 'ChizeTests' do
     inherit! :complete
     # Pods for testing
   end

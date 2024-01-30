@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TextInput, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native';
 import { supabase } from '../supabase';
 
-const SignIn = ({ navigation }) => {
+const SignIn = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const handleSigninSubmit = async () => {
+
+
+  // // useEffect(() => {
+  // //   Linking.addEventListener('url', handleDeepLink);
+
+  // //   // // Clean up the event listener
+  // //   // return () => {
+  // //   //   Linking.removeEventListener('url', handleDeepLink);
+  // //   // };
+  // // }, []);
+
+  const handleDeepLink = async (event) => {
+    handleSigninSubmit(true);
+  };
+
+  Linking.addEventListener('url', handleDeepLink);
+
+  const handleSigninSubmit = async (deeplink) => {
     // Reset the error messages
     setEmailError('');
     setPasswordError('');
@@ -32,19 +49,37 @@ const SignIn = ({ navigation }) => {
     }
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
+      if (deeplink && data?.session) {
+        await supabase.from('profiles').insert([
+          {
+            user_id: data.session.user.id,
+          },
+        ]);
+        await supabase.rpc('add_user_role', {
+          user_id: data.session.user.id,
+          role: 'user',
+        });
+      }
+
       if (error) {
-        console.log(error);
         setPasswordError(error.message);
       }
     } catch (e) {
       console.error('Error signing in:', e.message);
     }
   };
+
+  useEffect(() => {
+    if (route?.params?.verEmail && route?.params?.verPassword) {
+      setEmail(route.params.verEmail);
+      setPassword(route.params.verPassword);
+    }
+  }, [route?.params]);
 
   const handleEmailChange = text => {
     setEmail(text);
@@ -56,7 +91,7 @@ const SignIn = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.title}>Log In</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -99,8 +134,9 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 25,
     marginVertical: 20,
+    fontWeight: 400,
   },
   createButton: {
     paddingVertical: 10,
@@ -122,12 +158,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF5A5F',
     borderRadius: 8,
     marginTop: 10,
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 20,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   input: {
-    height: 40,
+    height: 45,
     borderColor: '#CCCCCC',
     borderWidth: 1,
     borderRadius: 5,
