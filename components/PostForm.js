@@ -28,7 +28,6 @@ const PostForm = ({route}) => {
   const [predictions, setPredictions] = useState([]);
   const [locationValue, setLocationValue] = useState('');
   const [placeId, setPlaceId] = useState('');
-  const [numberOfPosts, setNumberOfPosts] = useState(0);
   const [displayLoader, setDisplayLoader] = useState(false);
   const [currPlaceCoordinates, setCurrPlaceCoordinates] = useState({});
   const {
@@ -226,9 +225,9 @@ const PostForm = ({route}) => {
                   text2: 'Your post was successfully deleted.',
                 });
               }
-              setDisplayLoader(false);
             } catch (e) {
               console.log(e.message);
+            } finally {
               setDisplayLoader(false);
             }
           },
@@ -261,22 +260,33 @@ const PostForm = ({route}) => {
 
   const uploadPhoto = async () => {
     const fileName = `${user.user_id}_${Date.now()}.jpg`;
-    try {
-      const {error} = await supabase.storage
-        .from(user.user_id)
-        .upload(fileName, image);
 
-      if (error) {
-        console.error('Error uploading image:', error);
+    const { error: bucketError } = await supabase.storage.getBucket(user.user_id);
+    if (bucketError) {
+      const { error: createError } = await supabase.storage.createBucket(user.user_id, { public: true });
+      if (createError) {
+        console.error('Error creating bucket:', createError);
         return null;
-      } else {
-        const publicURL = await supabase.storage
-          .from(user.user_id)
-          .getPublicUrl(fileName);
-        return publicURL;
       }
+    }
+
+    try {
+      const { error: uploadError } = await supabase.storage.from(user.user_id).upload(fileName, image);
+      if (uploadError) {
+        console.error('Error uploading image:', uploadError);
+        return null;
+      }
+      const publicURL = await supabase.storage
+      .from(user.user_id)
+      .getPublicUrl(fileName);
+      if (!publicURL) {
+        console.error('Error getting public URL');
+        return null;
+      }
+
+      return publicURL;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error in uploadPhoto:', error);
       return null;
     }
   };
@@ -284,84 +294,79 @@ const PostForm = ({route}) => {
   const handlePostSubmit = async () => {
     if (image) {
       setDisplayLoader(true);
+
+      const canPost = user?.subscriptionType || user.numberOfPosts < 1;
+      if (!canPost) {
+        Toast.show({
+          type: 'error',
+          text1: 'Limit Reached',
+          text2: 'You have reached your post limit for the day.',
+        });
+        setDisplayLoader(false);
+        return;
+      }
+
+      const publicURL = await uploadPhoto();
+
+      if (!publicURL) {
+        setDisplayLoader(false);
+        return;
+      }
+
       try {
-        if (user?.subscriptionType || user.numberOfPosts < 1) {
-          setNumberOfPosts(user.numberOfPosts + 1);
-          const { error: bucketError } = await supabase.storage.getBucket(user.user_id);
-  
-          if (bucketError) {
-            await supabase.storage.createBucket(user.user_id, {
-              public: true,
-            });
-          }
-  
-          const publicURL = await uploadPhoto();
-  
-          const { data: postData, error: postError } = await supabase
-            .from('posts')
-            .insert([
-              {
-                photo: publicURL?.data.publicUrl,
-                location: locationValue,
-                locationDescription,
-                gender: user.gender,
-                user_id: user.user_id,
-                place_id: placeId,
-                preference: user.preference,
-                active: true,
-                coords: currPlaceCoordinates,
-              },
-            ]);
-  
-          await supabase
-            .from('profiles')
-            .update({
-              numberOfPosts: numberOfPosts,
-            })
-            .eq('user_id', user.user_id)
-            .select();
-  
-          if (postError) {
-            Toast.show({
-              type: 'error',
-              text1: 'Error',
-              text2: postError.message, // Display the error message
-            });
+        const { data: postData, error: postError } = await supabase.from('posts').insert({
+          photo: publicURL?.data?.publicUrl,
+          location: locationValue,
+          locationDescription,
+          gender: user.gender,
+          user_id: user.user_id,
+          place_id: placeId,
+          preference: user.preference,
+          active: true,
+          coords: currPlaceCoordinates,
+        }).select();
+
+        if (postError) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Failed to create post.',
+          });
+          setDisplayLoader(false);
+          return;
+        } else {
+          const updatedNumberOfPosts = user.numberOfPosts + 1;
+          const { error: updateError } = await supabase.from('profiles').update({ numberOfPosts: updatedNumberOfPosts }).eq('user_id', user.user_id);
+
+          if (updateError) {
+            console.error('Error updating user profile:', updateError);
           } else {
+            setUser(prevState => ({
+              ...prevState,
+              numberOfPosts: updatedNumberOfPosts,
+            }));
+
+            setActivePost(postData[0]);
+            setCurrPlaceId(placeId);
             Toast.show({
               type: 'success',
               text1: 'Success!',
               text2: 'Your post is live!',
             });
-            setUser({
-              ...user,
-              numberOfPosts,
-            });
-  
-            if (postData) {
-              setActivePost(postData[0]);
-            }
-            setCurrPlaceId(placeId);
           }
-        } else {
-          Toast.show({
-            type: 'error',
-            text1: 'No more posts for the day!',
-            text2: 'Subscribe for more posts',
-          });
         }
-        setDisplayLoader(false);
       } catch (e) {
-        setDisplayLoader(false);
+        console.error('Error submitting post:', e);
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'An error occurred while submitting your post.', // Display a generic error message
+          text1: 'Submission Error',
+          text2: 'An error occurred while submitting your post.',
         });
-        console.log(e, 'this is the error');
+      } finally {
+        setDisplayLoader(false);
       }
     }
-  }
+  };
 
   const handleSetLocationDescription = text => {
     setLocationDescription(text);
@@ -605,7 +610,7 @@ const PostForm = ({route}) => {
             </TouchableOpacity>
           )}
         </View>
-        {displayLoader && 
+        {displayLoader &&
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color="#FF5A5F" />
         </View>}

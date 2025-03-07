@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { supabase } from '../supabase';
 import UserContext from '../context/UserContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,6 +9,7 @@ const Matches = ({navigation}) => {
     const [matches, setMatches] = useState(null);
     const { user } = useContext(UserContext);
     const [selectedMatch, setSelectedMatch] = useState(null);
+    const [displayLoader, setDisplayLoader] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
@@ -20,6 +21,7 @@ const Matches = ({navigation}) => {
 
         const getMatchesAndPosts = async () => {
             setMatches([]);
+            setDisplayLoader(true);
             try {
               const { data: matchesData, error: matchesError } = await supabase
                 .from('matches')
@@ -71,7 +73,9 @@ const Matches = ({navigation}) => {
                 setMatches(formattedMatches);
               }
             } catch (e) {
-              console.log(e);
+                console.log(e);
+            } finally {
+                setDisplayLoader(false);
             }
         };
 
@@ -112,6 +116,11 @@ const Matches = ({navigation}) => {
             <View style={styles.container}>
                 <Text style={styles.title}>Matches</Text>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                {displayLoader ? (
+                <View style={styles.loaderContainer}>
+                    <ActivityIndicator size="large" color="#FF5A5F" />
+                </View>
+            ) : (
                 <View style={styles.requests}>
                     {matches && matches.length > 0 ? (
                         matches.map((match) => (
@@ -136,6 +145,7 @@ const Matches = ({navigation}) => {
                         <Text style={styles.titleNone}>No matches yet...</Text>
                     )}
                 </View>
+            )}
                 </ScrollView>
                 <Modal visible={modalVisible} animationType="slide">
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -172,6 +182,16 @@ const Matches = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+    loaderContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 3,
+    },
     locationDescription: {
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
@@ -222,6 +242,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         paddingTop: 20,
+        paddingBottom: 15,
     },
     postDetails: {
         borderRadius: 10,

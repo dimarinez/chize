@@ -97,19 +97,19 @@ function Slide3({ setPreference, preference, setNextState }) {
             <Text style={styles.title}>What are you looking for?</Text>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    style={[styles.button, preference === 'date' && styles.activeButton]}
-                    onPress={() => setPreference('date')}
-                >
-                    <Text style={[styles.buttonText, preference === 'date' && styles.activeButtonText]}>
-                        Date
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
                     style={[styles.button, preference === 'friends' && styles.activeButton]}
                     onPress={() => setPreference('friends')}
                 >
                     <Text style={[styles.buttonText, preference === 'friends' && styles.activeButtonText]}>
                         Friends
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.button, preference === 'date' && styles.activeButton]}
+                    onPress={() => setPreference('date')}
+                >
+                    <Text style={[styles.buttonText, preference === 'date' && styles.activeButtonText]}>
+                        Date
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -390,7 +390,7 @@ function FormSlides() {
     const [inches, setInches] = useState('0"');
     const [age, setAge] = useState(null);
     const [height, setHeight] = useState('');
-    const [preference, setPreference] = useState('date');
+    const [preference, setPreference] = useState('friends');
     const [hometown, setHometown] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
     const [selectedDate, setSelectedDate] = useState(new Date('2005-01-01'));

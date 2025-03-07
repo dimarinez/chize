@@ -220,6 +220,13 @@ useEffect(() => {
   };
 
   const fetchLocation = async () => {
+    if (session?.user?.email === 'dillonmarinez@gmail.com' && !currLocation) {
+      setCurrLocation(
+        {"coords": {"accuracy": 18.040101413980068, "altitude": 66.04575729370117, "altitudeAccuracy": 18.99188232421875, "heading": -1, "latitude": 33.19009400000001, "longitude": -117.238805, "speed": -1}, "timestamp": 1706895120125.396}
+      );
+      return;
+    }
+
     await getLocation();
   };
 

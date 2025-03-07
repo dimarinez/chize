@@ -68,17 +68,17 @@ const SignUp = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
         keyboardType="email-address"
       />
       {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+      <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
-        placeholder="Password"
         value={password}
         secureTextEntry={true}
         onChangeText={(text) => setPassword(text)}
@@ -86,9 +86,9 @@ const SignUp = ({ navigation }) => {
       {passwordError ? (
         <Text style={styles.errorText}>{passwordError}</Text>
       ) : null}
+      <Text style={styles.label}>Re-type password</Text>
       <TextInput
         style={styles.input}
-        placeholder="Re-type Password"
         secureTextEntry={true}
         value={retypePassword}
         onChangeText={(text) => setRetypePassword(text)}
@@ -117,6 +117,12 @@ const SignUp = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  label: {
+    fontSize: 12,
+    marginBottom: 5,
+    fontWeight: 'bold',
+    marginLeft: 2,
+  },
   container: {
     marginHorizontal: 20,
     marginTop: 20,

@@ -58,11 +58,11 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app does not require access to the photo library</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use the camera</string>
+	<string>Allowing $(PRODUCT_NAME) to access your camera is essential for identity verification and enabling you to share your photo with other users for recognition during meetups. This feature helps ensure the safety and trustworthiness of interactions within our community.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location</string>
+	<string>$(PRODUCT_NAME) requires your location to suggest matches and social spots nearby when you are using the app. For example, this helps you find other users within your preferred distance settings for potential connections.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location while using the app</string>
+	<string>By allowing $(PRODUCT_NAME) to always access your location, you enable the app to send you real-time notifications about matches and new social venues in your area, even when the app is not open. This ensures you don't miss out on any new connections.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to use the microphone</string>
 	<key>UIAppFonts</key>

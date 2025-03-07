@@ -1,17 +1,36 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Animated, ActivityIndicator } from 'react-native';
 import { supabase } from '../supabase';
 import UserContext from '../context/UserContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PostFeed = () => {
   const [posts, setPosts] = useState([]);
+  const [displayLoader, setDisplayLoader] = useState(false);
   const { currPlaceId, user, activePost, setActivePost } = useContext(UserContext);
-  const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const fadeAnim = useState(new Animated.Value(0))[0];
+
+  const updatePostInteraction = (postId, interactionType) => {
+    // Update the activePost state to reflect the interaction
+    setActivePost(currentActivePost => {
+      const updatedRequests = interactionType === 'request'
+        ? [...(currentActivePost.requests || []), postId.toString()]
+        : currentActivePost.requests;
+      const updatedDeclines = interactionType === 'decline'
+        ? [...(currentActivePost.declines || []), postId.toString()]
+        : currentActivePost.declines;
+
+      return {
+        ...currentActivePost,
+        requests: updatedRequests,
+        declines: updatedDeclines,
+      };
+    });
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setDisplayLoader(true);
       try {
         const { data: postsData, error: postsError } = await supabase
           .from('posts')
@@ -59,6 +78,8 @@ const PostFeed = () => {
         }
       } catch (error) {
         console.log('Error fetching posts:', error);
+      } finally {
+        setDisplayLoader(false);
       }
     };
 
@@ -158,9 +179,7 @@ const PostFeed = () => {
             .eq('user_id', user.user_id)
             .eq('active', true);
 
-          setActivePost({...activePost, requests: activeRequests});
-
-          setCurrentPostIndex(currentPostIndex + 1);
+          updatePostInteraction(post.id, 'request');
 
           if (errorMessage) {
             console.log('Error updating requests:', errorMessage);
@@ -185,86 +204,100 @@ const PostFeed = () => {
         .eq('user_id', user.user_id)
         .eq('active', true);
 
-      setActivePost({...activePost, declines: activeDeclines});
-      setCurrentPostIndex(currentPostIndex + 1);
+      updatePostInteraction(post.id, 'decline');
     } catch (e) {
       console.error(e.message);
     }
   };
 
+  const filteredPosts = posts.filter(post => {
+    const isNotRequested = !activePost?.requests?.includes(post.id.toString());
+    const isNotDeclined = activePost?.declines ? !activePost.declines.includes(post.id.toString()) : true;
+    return isNotRequested && isNotDeclined;
+  });
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}>
-        {activePost && posts?.length && posts.length !== currentPostIndex ? (
-          !activePost?.requests?.includes(posts[currentPostIndex].id.toString()) &&
-          !activePost?.declines?.includes(posts[currentPostIndex].id.toString()) ? (
-            <Animated.View
-              key={posts[currentPostIndex].id}
-              style={{
-                ...styles.postContainer,
-                opacity: fadeAnim,
-              }}
-            >
-            <Text style={styles.postName}>{posts[currentPostIndex].profiles.name}</Text>
-            <View style={styles.imageContainer}>
-              <Image source={{ uri: posts[currentPostIndex].photo }} style={styles.postImage} />
-              <TouchableOpacity style={styles.declineButton} onPress={() => {
-                handleDecline(posts[currentPostIndex]);
-              }}>
-                <Icon name="window-close" size={24} color="#000" />
-              </TouchableOpacity>
-              {activePost?.requests && activePost?.requests?.includes(posts[currentPostIndex].id.toString()) ? (
-                <View style={styles.heartButton}>
-                  <Icon name="emoticon-wink" size={24} color="#FF5A5F" />
+      {displayLoader ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#FF5A5F" />
+        </View>
+      ) : (
+        <View style={styles.container}>
+        {activePost && filteredPosts.length > 0 ? (
+            filteredPosts.map((post, index) => (
+              <Animated.View
+                key={post.id}
+                style={{
+                  ...styles.postContainer,
+                  opacity: fadeAnim,
+                }}
+              >
+               <Text style={styles.postName}>{post.profiles.name}</Text>
+                <View style={styles.imageContainer}>
+                  <Image source={{ uri: post.photo }} style={styles.postImage} />
+                  <TouchableOpacity
+                    style={styles.declineButton}
+                    onPress={() => handleDecline(post)}
+                  >
+                    <Icon name="window-close" size={24} color="#000" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.heartButton}
+                    onPress={() => handleRequest(post)}
+                  >
+                    <Icon name="hand-wave-outline" size={24} color="#FF5A5F" />
+                  </TouchableOpacity>
                 </View>
-              ) : (
-                <TouchableOpacity style={styles.heartButton} onPress={() => handleRequest(posts[currentPostIndex])}>
-                  <Icon name="emoticon-happy-outline" size={24} color="#FF5A5F" />
-                </TouchableOpacity>
-              )}
-            </View>
-            <View style={styles.postDetails}>
-              <View style={styles.attributes}>
-                <View style={styles.borderRightDetail}>
+              <View style={styles.postDetails}>
+                <View style={styles.attributes}>
+                  <View style={styles.borderRightDetail}>
+                    <Text style={styles.postDetail}>
+                      <Icon name="cake-variant-outline" size={18} color="#000000" /> {post.profiles.age}
+                    </Text>
+                  </View>
                   <Text style={styles.postDetail}>
-                    <Icon name="cake-variant-outline" size={18} color="#000000" /> {posts[currentPostIndex].profiles.age}
+                    <Icon name="ruler" size={18} color="#000000" /> {post?.profiles?.height?.replace(/"{2}$/g, '"')}
                   </Text>
                 </View>
-                <Text style={styles.postDetail}>
-                  <Icon name="ruler" size={18} color="#000000" /> {posts[currentPostIndex].profiles.height.replace(/"{2}$/g, '"')}
-                </Text>
+                <Text style={styles.postBio}>{post.profiles.details}</Text>
+                <View style={styles.interestsContainer}>
+                  {post?.profiles.interests &&
+                    post?.profiles.interests.split(',').map((interest) => (
+                      <Text style={styles.interest} key={interest}>
+                        {interest}
+                      </Text>
+                    ))}
+                </View>
               </View>
-              <Text style={styles.postBio}>{posts[currentPostIndex].profiles.details}</Text>
-              <View style={styles.interestsContainer}>
-                {posts[currentPostIndex]?.profiles.interests &&
-                  posts[currentPostIndex]?.profiles.interests.split(',').map((interest) => (
-                    <Text style={styles.interest} key={interest}>
-                      {interest}
-                    </Text>
-                  ))}
-              </View>
-            </View>
-          </Animated.View>
-          ) : (
-            <View>
-              <Text style={styles.titleNone}>No more posts available.</Text> 
-            </View>
-          )
-      ) : (
-        <View>
-          {activePost || posts.length === 0 ? (
-            <Text style={styles.titleNone}>No posts available.</Text> 
-          ) : (
-            <Text style={styles.titleNone}>Post to see who's available :)</Text> 
-          )}
+              </Animated.View>
+            ))
+        ) : (
+          <View>
+            {activePost ? (
+              <Text style={styles.titleNone}>No posts available.</Text> 
+            ) : (
+              <Text style={styles.titleNone}>Post to see who's available :)</Text> 
+            )}
+          </View>
+        )}
         </View>
       )}
-      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  loaderContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 3,
+  },
   declineButton: {
     backgroundColor: 'white',
     padding: 10,
@@ -329,6 +362,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     paddingTop: 20,
+    paddingBottom: 15,
   },
   postName: {
     fontSize: 25,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, Button, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, ActivityIndicator, ScrollView } from 'react-native';
 import { supabase } from '../supabase';
 import UserContext from '../context/UserContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,10 +9,10 @@ const Requests = ({navigation}) => {
     const [requests, setRequests] = useState(null);
     const { user, currPlaceId } = useContext(UserContext);
     const [selectedRequest, setSelectedRequest] = useState(null);
+    const [displayLoader, setDisplayLoader] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
-        console.log(user);
         navigateToScreen().then(screenName => {
             if (screenName) {
                 navigation.navigate(screenName);
@@ -20,6 +20,7 @@ const Requests = ({navigation}) => {
         });
 
         const getRequestsAndPosts = async () => {
+            setDisplayLoader(true);
             try {
               const { data: requestData, error: requestError } = await supabase
                 .from('requests')
@@ -56,7 +57,9 @@ const Requests = ({navigation}) => {
                 setRequests(formattedRequests);
               }
             } catch (e) {
-              console.log(e);
+                console.log(e);
+            } finally {
+                setDisplayLoader(false);
             }
         };
 
@@ -129,7 +132,12 @@ const Requests = ({navigation}) => {
         <View style={styles.container}>
             <Text style={styles.title}>Waved at you</Text>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <View style={styles.requests}>
+            {displayLoader ? (
+                <View style={styles.loaderContainer}>
+                    <ActivityIndicator size="large" color="#FF5A5F" />
+                </View>
+            ) : (
+                <View style={styles.requests}>
                 {requests && requests.length > 0 ? (
                     requests.map((request) => (
                         <TouchableOpacity
@@ -152,6 +160,7 @@ const Requests = ({navigation}) => {
                     <Text style={styles.titleNone}>Nothing yet...</Text>
                 )}
             </View>
+            )}
             </ScrollView>
             <Modal visible={modalVisible} animationType="slide">
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -165,7 +174,7 @@ const Requests = ({navigation}) => {
                     <View style={styles.requestImageContainer}>
                     <Image source={{ uri: selectedRequest?.sender_photo }} style={styles.postImage} />
                         <TouchableOpacity style={styles.heartButton} onPress={handleAccept}>
-                            <Icon name="cards-heart-outline" size={24} color="#FF5A5F" />
+                            <Icon name="handshake-outline" size={24} color="#FF5A5F" />
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.declineButton} onPress={handleDecline}>
                             <Icon name="window-close" size={24} color="#000" />
@@ -191,6 +200,16 @@ const Requests = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+    loaderContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 3,
+    },
     modalContainer: {
         paddingTop: 60,
     },
@@ -231,6 +250,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         paddingTop: 20,
+        paddingBottom: 15,
     },
     postDetails: {
         borderRadius: 10,

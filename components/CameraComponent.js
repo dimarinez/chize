@@ -6,16 +6,15 @@ import {
   Text,
   Image,
 } from 'react-native';
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
+import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import UserContext from '../context/UserContext';
 
 const CameraComponent = () => {
   const camera = useRef(null);
-  const devices = useCameraDevices();
   const [cameraType, setCameraType] = useState('front');
-  const device = devices[cameraType];
+  const device = useCameraDevice(cameraType);
   const navigation = useNavigation();
   const [showCamera, setShowCamera] = useState(true);
   const [imageSource, setImageSource] = useState('');

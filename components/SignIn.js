@@ -92,17 +92,17 @@ const SignIn = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Log In</Text>
+      <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
         value={email}
         onChangeText={handleEmailChange}
         keyboardType="email-address"
       />
       {emailError ? <Text style={styles.error}>{emailError}</Text> : null}
+      <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
-        placeholder="Password"
         value={password}
         secureTextEntry={true}
         onChangeText={handlePasswordChange}
@@ -127,6 +127,12 @@ const SignIn = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+  label: {
+    fontSize: 12,
+    marginBottom: 5,
+    fontWeight: 'bold',
+    marginLeft: 2,
+  },
   container: {
     paddingTop: 30,
     marginHorizontal: 20,

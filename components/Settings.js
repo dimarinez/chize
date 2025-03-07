@@ -138,7 +138,7 @@ const Settings = ({ navigation, route }) => {
                     </TouchableOpacity>
                     <View style={styles.termsConditions}>
   <Text style={styles.heading}>Privacy Policy for Chize</Text>
-  <Text style={styles.updatedDate}>Last Updated: January 27, 2024</Text>
+  <Text style={styles.updatedDate}>Last Updated: January 31, 2024</Text>
 
   <Text style={styles.sectionHeading}>1. Introduction</Text>
   <Text style={styles.paragraph}>
@@ -148,56 +148,32 @@ const Settings = ({ navigation, route }) => {
     information.
   </Text>
 
-  <Text style={styles.sectionHeading}>2. Information We Collect</Text>
-  <Text style={styles.subsectionHeading}>2.1. User Profile Information</Text>
-  <Text style={styles.paragraph}>
-    To provide our dating services, we collect the following information when
-    you create a user profile: Name, Gender, Date of Birth, Profile Picture,
-    Email Address, Location Information (geographical coordinates).
-  </Text>
-
-  <Text style={styles.subsectionHeading}>2.2. User-Generated Content</Text>
-  <Text style={styles.paragraph}>
-    When you use our app, you may share personal information voluntarily, such
-    as photos, messages, and other content, which may be visible to other users.
-  </Text>
-
-  <Text style={styles.subsectionHeading}>2.3. Usage Data</Text>
-  <Text style={styles.paragraph}>
-    We collect data on how you use our app, including interactions with other users' profiles, messages and chats, and location data when using location-based features.
-  </Text>
-
-  <Text style={styles.sectionHeading}>3. How We Use Your Information</Text>
+  <Text style={styles.sectionHeading}>2. How We Use Your Information</Text>
   <Text style={styles.paragraph}>
     We use the information we collect to provide dating services, improve our services, and communicate with you. This includes matching users based on preferences and location, facilitating communication between users, personalizing the app experience, analyzing app usage to enhance features, and sending updates and service-related information.
   </Text>
 
-  <Text style={styles.sectionHeading}>4. Sharing Your Information</Text>
-  <Text style={styles.paragraph}>
-    Your information may be shared with other users of the app, third-party service providers assisting us in delivering our services, and to comply with legal obligations or law enforcement requests.
-  </Text>
-
-  <Text style={styles.sectionHeading}>5. Your Choices</Text>
+  <Text style={styles.sectionHeading}>3. Your Choices</Text>
   <Text style={styles.paragraph}>
     You have choices regarding your account settings, communication preferences, and can delete your account at any time to remove your profile and associated data from our app.
   </Text>
 
-  <Text style={styles.sectionHeading}>6. Security</Text>
+  <Text style={styles.sectionHeading}>4. Security</Text>
   <Text style={styles.paragraph}>
     We implement security measures to protect your information, though no data transmission over the internet can be guaranteed to be entirely secure.
   </Text>
 
-  <Text style={styles.sectionHeading}>7. Changes to this Privacy Policy</Text>
+  <Text style={styles.sectionHeading}>5. Changes to this Privacy Policy</Text>
   <Text style={styles.paragraph}>
     We may update this Privacy Policy for operational, legal, or regulatory reasons. Changes will be notified through our website or the app.
   </Text>
 
-  <Text style={styles.sectionHeading}>User Interactions and Meetups in Chize App</Text>
+  <Text style={styles.sectionHeading}>6. User Interactions and Meetups in Chize App</Text>
   <Text style={styles.paragraph}>
     We do not monitor or moderate meetings or interactions outside of our app. Users are responsible for their safety when deciding to meet in person. We encourage caution and good judgment. We are not liable for any incidents or damages from such meetings.
   </Text>
 
-  <Text style={styles.sectionHeading}>8. Contact Us</Text>
+  <Text style={styles.sectionHeading}>7. Contact Us</Text>
   <Text style={styles.paragraph}>
     If you have questions or concerns about this Privacy Policy or our data practices, please contact us at feedback@chizeapp.com.
   </Text>

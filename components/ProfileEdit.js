@@ -239,20 +239,20 @@ function Preference({ setPreference, preference }) {
         <View>
             <Text style={styles.label}>What are you looking for?</Text>
             <View style={styles.hobbyButtonContainer}>
+            <TouchableOpacity
+                    style={[styles.hobbyButton, preference === 'friends' && styles.selectedButton]}
+                    onPress={() => setPreference('friends')}
+                >
+                    <Text style={[styles.hobbyButtonText, preference === 'friends' && styles.activeButtonText]}>
+                       Friends
+                    </Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.hobbyButton, preference === 'date' && styles.selectedButton]}
                     onPress={() => setPreference('date')}
                 >
                     <Text style={[styles.hobbyButtonText, preference === 'date' && styles.activeButtonText]}>
                         Date
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.hobbyButton, preference === 'friends' && styles.selectedButton]}
-                    onPress={() => setPreference('friends')}
-                >
-                    <Text style={[styles.hobbyButtonText, preference === 'friends' && styles.activeButtonText]}>
-                       Friends
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity

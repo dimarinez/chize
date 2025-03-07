@@ -221,7 +221,7 @@ const Subscriptions = ({navigation}) => {
         <Text style={styles.sectionHeading}>3. Privacy Policy</Text>
 
         <Text style={styles.paragraph}>
-            <Text style={styles.boldText}>3.1.</Text> Your use of the Service is also governed by our Privacy Policy, which can be found at 
+            <Text style={styles.boldText}>3.1.</Text> Your use of the Service is also governed by our Privacy Policy, which can be found at
             <Text
                 style={styles.linkText}
                 onPress={() => {
@@ -263,6 +263,9 @@ const Subscriptions = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  linkText: {
+    fontWeight: 'bold',
+  },
   loaderContainer: {
     flex: 1,
     alignItems: 'center',
